@@ -1,0 +1,15 @@
+:root {
+  --font-display: var(--font-archivo), "Arial Black", sans-serif;
+  --font-body: var(--font-inter), system-ui, sans-serif;
+  --color-bg: #ffffff;
+  --color-surface: #f2f2f2;
+  --color-ink: #0a0a0a;
+  --color-muted: #6b6b6b;
+  --color-line: #e3e3e3;
+  --color-accent: #d7ff3a;
+  --color-accent-ink: #0a0a0a;
+  --color-danger: #c62828;
+  --fs-hero: clamp(2.5rem, 1.2rem + 6vw, 6.5rem);
+  --fs-h2: clamp(1.75rem, 1rem + 3vw, 3.25rem);
+  --radius: 2px;
+}

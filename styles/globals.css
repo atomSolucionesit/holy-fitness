@@ -1,0 +1,27 @@
+@import "tailwindcss";
+@import "./tokens.css";
+
+@theme inline {
+  --color-bg: var(--color-bg);
+  --color-surface: var(--color-surface);
+  --color-ink: var(--color-ink);
+  --color-muted: var(--color-muted);
+  --color-line: var(--color-line);
+  --color-accent: var(--color-accent);
+  --color-accent-ink: var(--color-accent-ink);
+  --color-danger: var(--color-danger);
+  --font-display: var(--font-display);
+  --font-sans: var(--font-body);
+}
+
+html { scroll-behavior: smooth; }
+body { background: var(--color-bg); color: var(--color-ink); font-family: var(--font-body); font-size: 15px; -webkit-font-smoothing: antialiased; }
+.display { font-family: var(--font-display); font-weight: 900; text-transform: uppercase; line-height: .92; letter-spacing: -0.02em; }
+.h-hero { font-size: var(--fs-hero); }
+.h-section { font-size: var(--fs-h2); }
+.label { text-transform: uppercase; letter-spacing: .08em; font-weight: 700; font-size: 12px; }
+:focus-visible { outline: 2px solid var(--color-ink); outline-offset: 2px; }
+.no-scrollbar { scrollbar-width: none; } .no-scrollbar::-webkit-scrollbar { display: none; }
+@media (prefers-reduced-motion: reduce) { * { animation: none !important; transition: none !important; scroll-behavior: auto !important; } }
+.skeleton { background: linear-gradient(90deg,#eee,#f7f7f7,#eee); background-size: 200% 100%; animation: sk 1.2s infinite; }
+@keyframes sk { to { background-position: -200% 0; } }
