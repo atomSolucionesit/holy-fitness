@@ -15,7 +15,7 @@ export interface Category { slug: string; name: string; gender: Gender }
 export interface Collection { slug: string; name: string; tagline: string; image: string }
 export interface Customer { id: string; email: string; name: string; phone?: string }
 
-export type ShippingMethod = "domicilio" | "retiro";
+export type ShippingMethod = "envio" | "retiro";
 export type PaymentMethod = "mercadopago" | "transferencia" | "local";
 export type OrderStatus = "pendiente" | "pagado" | "preparando" | "enviado" | "entregado" | "cancelado";
 
@@ -23,9 +23,10 @@ export interface OrderItem { variantId: string; productSlug: string; name: strin
 export interface Order {
   id: string; createdAt: string; status: OrderStatus; items: OrderItem[];
   subtotal: number; discount: number; shipping: number; total: number;
-  couponCode?: string; shippingMethod: ShippingMethod; paymentMethod: PaymentMethod;
+  couponCode?: string; shippingMethod: ShippingMethod;
+  shippingOption?: { id: string; carrierName: string; service: string; label: string; eta: string }; paymentMethod: PaymentMethod;
   customer: { name: string; email: string; phone: string };
-  address?: { street: string; city: string; province: string; zip: string };
+  address?: { street?: string; city: string; province: string; zip: string };
 }
 
 export interface ProductQuery {

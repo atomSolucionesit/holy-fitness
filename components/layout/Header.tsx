@@ -5,8 +5,8 @@ import { NAV, type NavKey } from "./nav-data";
 import { useCart, cartCount } from "@/store/cart";
 import { useUI } from "@/store/ui";
 import { Drawer } from "@/components/ui/Drawer";
-import { placeholder } from "@/lib/utils";
 import Image from "next/image";
+import { Logo } from "@/components/ui/Logo";
 
 export function Header() {
   const [open, setOpen] = useState<NavKey | null>(null);
@@ -18,7 +18,7 @@ export function Header() {
     <header className="sticky top-0 z-40 border-b border-line bg-white" onMouseLeave={() => setOpen(null)}>
       <div className="mx-auto flex h-16 max-w-[1600px] items-center gap-6 px-4 lg:px-8">
         <button className="label lg:hidden" aria-label="Abrir menú" onClick={() => setMenu(true)}>☰</button>
-        <Link href="/" className="display text-xl tracking-tight lg:text-2xl" aria-label="Holy Fitness - Inicio">Holy Fitness</Link>
+        <Link href="/" aria-label="Holy Fitness - Inicio" className="shrink-0"><Logo className="h-12" /></Link>
         <nav className="hidden items-center gap-1 lg:flex" aria-label="Principal">
           {(Object.keys(NAV) as NavKey[]).map((k) => (
             <Link key={k} href={`/${k}`} onMouseEnter={() => setOpen(k)} onFocus={() => setOpen(k)} className="label px-3 py-5 hover:underline underline-offset-8">{NAV[k].label}</Link>
@@ -44,7 +44,7 @@ export function Header() {
               ))}
             </div>
             <Link href={NAV[open].feature.href} onClick={() => setOpen(null)} className="relative block aspect-[4/3] overflow-hidden bg-surface">
-              <Image src={placeholder(NAV[open].feature.title, NAV[open].feature.tone, "l")} alt="" fill unoptimized className="object-cover" />
+              <Image src={NAV[open].feature.image} alt="" fill className="object-cover" />
               <span className="display absolute bottom-3 left-3 text-3xl">{NAV[open].feature.title}</span>
             </Link>
           </div>

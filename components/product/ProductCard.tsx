@@ -17,7 +17,7 @@ export function ProductCard({ p, priority }: { p: Product; priority?: boolean })
   return (
     <article className="group relative" onMouseLeave={() => setQuick(false)}>
       <div className="relative aspect-[4/5] overflow-hidden bg-surface">
-        <Link href={`/producto/${p.slug}?color=${encodeURIComponent(color.name)}`} aria-label={p.name}>
+        <Link href={`/producto/${p.slug}?color=${encodeURIComponent(color.name)}`} aria-label={p.name} className="absolute inset-0 block">
           <Img src={color.images[0]!} alt={`${p.name} ${color.name}`} priority={priority} sizes="(min-width:1024px) 25vw, 50vw" className="transition-opacity duration-300 group-hover:opacity-0" />
           <Img src={color.images[1] ?? color.images[0]!} alt="" sizes="(min-width:1024px) 25vw, 50vw" className="opacity-0 transition-opacity duration-300 group-hover:opacity-100" />
         </Link>

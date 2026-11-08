@@ -23,11 +23,8 @@ export function Filters({ facets, total, shown }: { facets: Facets; total: numbe
   );
   return (
     <div>
-      <div className="mb-4 flex items-center justify-between gap-3">
-        <button className="label h-10 border border-ink px-4 lg:hidden" aria-expanded={open} onClick={() => setOpen(!open)}>Filtrar</button>
-        <p className="hidden text-sm text-muted lg:block">Mostrando {shown} de {total}</p>
-        <label className="flex items-center gap-2 text-sm"><span className="label">Ordenar</span>
-          <select className="h-10 border border-line px-2" value={sp.get("orden") ?? ""} onChange={(e) => set("orden", e.target.value || null)}>{SORTS.map(([v, l]) => <option key={v} value={v}>{l}</option>)}</select></label>
+      <div className="mb-4 lg:hidden">
+        <button className="label h-10 w-full border border-ink px-4" aria-expanded={open} onClick={() => setOpen(!open)}>{open ? "Ocultar filtros" : "Filtrar"}</button>
       </div>
       {active.length > 0 && (
         <div className="mb-4 flex flex-wrap items-center gap-2">{active.map(([k, v]) => <button key={k + v} onClick={() => toggle(k, v)} className="label border border-ink px-3 py-1.5 text-[11px]">{v} ✕</button>)}
@@ -38,6 +35,18 @@ export function Filters({ facets, total, shown }: { facets: Facets; total: numbe
         <fieldset className="py-4"><legend className="label mb-3">Precio</legend>
           <select className="h-10 w-full border border-line px-2" value={priceVal} onChange={(e) => setPrice(e.target.value)}>{PRICES.map(([v, l]) => <option key={v} value={v}>{l}</option>)}</select></fieldset>
       </div>
+    </div>
+  );
+}
+
+export function SortBar({ total, shown }: { total: number; shown: number }) {
+  const router = useRouter(); const path = usePathname(); const sp = useSearchParams();
+  const change = (v: string) => { const n = new URLSearchParams(sp.toString()); n.delete("limite"); if (v) n.set("orden", v); else n.delete("orden"); router.replace(`${path}?${n}`, { scroll: false }); };
+  return (
+    <div className="mb-4 flex items-center justify-between gap-3">
+      <p className="text-sm text-muted">Mostrando {shown} de {total}</p>
+      <label className="flex items-center gap-2 text-sm"><span className="label">Ordenar</span>
+        <select className="h-10 border border-line px-2" value={sp.get("orden") ?? ""} onChange={(e) => change(e.target.value)}>{SORTS.map(([v, l]) => <option key={v} value={v}>{l}</option>)}</select></label>
     </div>
   );
 }

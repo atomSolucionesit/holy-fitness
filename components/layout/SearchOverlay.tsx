@@ -34,7 +34,7 @@ export function SearchOverlay() {
                   {r.products.length === 0 && <p className="text-sm text-muted">No encontramos resultados para “{q}”.</p>}
                   <ul className="grid grid-cols-2 gap-4 md:grid-cols-3">{r.products.map((p) => (
                     <li key={p.slug}><Link href={`/producto/${p.slug}`} onClick={() => setSearch(false)} className="block">
-                      <div className="relative aspect-[4/5] bg-surface">{p.image && <Image src={p.image} alt="" fill unoptimized className="object-cover" />}</div>
+                      <div className="relative aspect-[4/5] bg-surface">{p.image && <Image src={p.image} alt="" fill className="object-cover" />}</div>
                       <p className="mt-2 text-sm font-semibold">{p.name}</p><p className="text-sm">{formatMoney(p.price)}</p></Link></li>))}</ul>
                 </div>
               </div>

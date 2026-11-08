@@ -3,7 +3,7 @@ import { Suspense } from "react";
 import { catalog } from "@/lib/providers";
 import type { ProductQuery } from "@/lib/domain/types";
 import { ProductGrid } from "./ProductCard";
-import { Filters } from "./Filters";
+import { Filters, SortBar } from "./Filters";
 import { Button } from "@/components/ui";
 
 export async function PLP({ title, subtitle, crumbs, query, basePath, searchParams }: { title: string; subtitle?: string; crumbs: [string, string?][]; query: ProductQuery; basePath: string; searchParams: Record<string, string | string[] | undefined> }) {
@@ -18,6 +18,7 @@ export async function PLP({ title, subtitle, crumbs, query, basePath, searchPara
       <div className="grid gap-8 lg:grid-cols-[240px_1fr]">
         <Suspense><Filters facets={r.facets} total={r.total} shown={r.items.length} /></Suspense>
         <div>
+          <Suspense><SortBar total={r.total} shown={r.items.length} /></Suspense>
           {r.items.length === 0 ? <p className="py-20 text-center text-muted">No encontramos productos con esos filtros.</p> : <ProductGrid items={r.items} />}
           <div className="mt-12 text-center"><p className="mb-3 text-sm text-muted">Mostrando {r.items.length} de {r.total}</p>
             {r.items.length < r.total && <Button variant="outline" href={`${basePath}?${sp}`}>Cargar más</Button>}</div>

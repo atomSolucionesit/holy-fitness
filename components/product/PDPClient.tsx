@@ -29,9 +29,9 @@ export function PDPClient({ p, initialColor }: { p: Product; initialColor?: stri
     <div className="grid gap-8 lg:grid-cols-[1fr_440px]">
       <div className="grid gap-3 lg:grid-cols-[80px_1fr]">
         <div className="order-2 flex gap-2 lg:order-1 lg:flex-col">{color.images.map((src, i) => (
-          <button key={src} onClick={() => setImg(i)} aria-label={`Imagen ${i + 1}`} className={cn("relative aspect-[4/5] w-16 border lg:w-full", i === img ? "border-ink" : "border-transparent")}><Image src={src} alt="" fill unoptimized className="object-cover" /></button>))}</div>
+          <button key={src} onClick={() => setImg(i)} aria-label={`Imagen ${i + 1}`} className={cn("relative aspect-[4/5] w-16 border lg:w-full", i === img ? "border-ink" : "border-transparent")}><Image src={src} alt="" fill className="object-cover" /></button>))}</div>
         <div className="relative order-1 aspect-[4/5] overflow-hidden bg-surface lg:order-2">
-          <Image src={color.images[img] ?? color.images[0]!} alt={`${p.name} ${color.name}`} fill unoptimized priority className="object-cover transition-transform duration-300 hover:scale-125" sizes="(min-width:1024px) 55vw, 100vw" />
+          <Image src={color.images[img] ?? color.images[0]!} alt={`${p.name} ${color.name}`} fill priority className="object-cover transition-transform duration-300 hover:scale-125" sizes="(min-width:1024px) 55vw, 100vw" />
         </div>
       </div>
       <div className="lg:sticky lg:top-24 lg:self-start">

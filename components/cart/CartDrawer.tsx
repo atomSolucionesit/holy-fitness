@@ -6,10 +6,13 @@ import { Drawer } from "@/components/ui/Drawer";
 import { Button } from "@/components/ui";
 import { FREE_SHIPPING_FROM } from "@/lib/domain/rules";
 import { formatMoney } from "@/lib/utils";
+import { ShippingPicker } from "./ShippingPicker";
+import { useShipping } from "./useShipping";
 
 export function CartDrawer() {
   const { lines, open, setOpen, setQty, remove } = useCart();
   const sub = cartSubtotal(lines);
+  const { selected } = useShipping();
   const left = Math.max(0, FREE_SHIPPING_FROM - sub);
   return (
     <Drawer open={open} onOpenChange={setOpen} title="Tu carrito">
@@ -20,7 +23,7 @@ export function CartDrawer() {
       <div className="flex-1 overflow-y-auto px-5">
         {lines.length === 0 ? <p className="py-12 text-center text-muted">Tu carrito está vacío.</p> : lines.map((l) => (
           <div key={l.variantId} className="flex gap-3 border-b border-line py-4">
-            <div className="relative h-28 w-22 shrink-0 bg-surface"><Image src={l.image} alt="" fill unoptimized className="object-cover" /></div>
+            <div className="relative h-28 w-22 shrink-0 bg-surface"><Image src={l.image} alt="" fill className="object-cover" /></div>
             <div className="flex flex-1 flex-col text-sm">
               <Link href={`/producto/${l.slug}`} onClick={() => setOpen(false)} className="font-semibold">{l.name}</Link>
               <p className="text-muted">{l.color} / {l.size}</p>
@@ -36,11 +39,14 @@ export function CartDrawer() {
             </div>
           </div>
         ))}
+        {lines.length > 0 && <div className="py-5"><ShippingPicker /></div>}
       </div>
       {lines.length > 0 && (
-        <div className="space-y-3 border-t border-line p-5">
-          <div className="flex justify-between font-semibold"><span>Subtotal</span><span>{formatMoney(sub)}</span></div>
-          <p className="text-xs text-muted">Envío y cupones se calculan en el checkout.</p>
+        <div className="space-y-2 border-t border-line bg-white p-5">
+          <div className="flex justify-between text-sm"><span>Subtotal</span><span>{formatMoney(sub)}</span></div>
+          <div className="flex justify-between text-sm"><span>Envío · {selected.carrierName}</span><span>{selected.price === 0 ? "Gratis" : formatMoney(selected.price)}</span></div>
+          <div className="flex justify-between border-t border-line pt-2 font-semibold"><span>Total estimado</span><span>{formatMoney(sub + selected.price)}</span></div>
+          <p className="text-xs text-muted">Los cupones se aplican en el checkout.</p>
           <Button full href="/checkout" onClick={() => setOpen(false)}>Finalizar compra</Button>
         </div>
       )}

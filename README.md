@@ -19,7 +19,7 @@ Ver `.env.example`. Las principales: `CATALOG_SOURCE` y `ORDERS_SOURCE` (`mock|s
 - `components/` ui, layout, product, home, cart, checkout.
 - `lib/domain` modelo de dominio y reglas puras; `lib/providers` puertos + adaptadores (mock, supabase, nexus); `lib/payments`.
 - `store/` Zustand (carrito, favoritos, UI). `data/` seed y contenido. `styles/tokens.css` design tokens (color de acento, fuentes).
-- `docs/` DECISIONES.md, NEXUS.md.
+- `docs/` DECISIONES.md, NEXUS.md, ENVIOS.md.
 
 ## Estado del MVP
-Funciona con datos mock: home, mega menú, búsqueda en vivo, listado con filtros/orden/URL, detalle, carrito, favoritos, checkout (pago simulado), confirmación. Ver `docs/DECISIONES.md` para lo pendiente.
+Funciona con datos mock, logo de la marca, fotos de demostración y cotización de envío (estimada) con Correo Argentino y Vía Cargo: home, mega menú, búsqueda en vivo, listado con filtros/orden/URL, detalle, carrito, favoritos, checkout (pago simulado), confirmación. Ver `docs/DECISIONES.md` para lo pendiente.

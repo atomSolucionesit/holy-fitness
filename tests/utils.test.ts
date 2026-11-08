@@ -1,6 +1,7 @@
 import { describe, expect, it } from "vitest";
 import { formatMoney, slugify, normalize, discountPct } from "@/lib/utils";
-import { couponDiscount, orderTotals, shippingCost, FREE_SHIPPING_FROM } from "@/lib/domain/rules";
+import { couponDiscount, orderTotals } from "@/lib/domain/rules";
+import { tariff, zoneOf } from "@/lib/shipping/tariffs";
 import { mockCatalog } from "@/lib/providers/mock/catalog";
 
 describe("utils", () => {
@@ -11,9 +12,12 @@ describe("utils", () => {
 });
 describe("reglas", () => {
   it("cupón", () => expect(couponDiscount("BIENVENIDA10", 10000)).toBe(1000));
-  it("envío gratis por monto", () => expect(shippingCost("domicilio", "1000", FREE_SHIPPING_FROM)).toBe(0));
-  it("retiro gratis", () => expect(shippingCost("retiro", "5000", 100)).toBe(0));
-  it("totales", () => expect(orderTotals([{ unitPrice: 10000, qty: 2 }], undefined, "domicilio", "1000").total).toBe(24500));
+  it("totales", () => expect(orderTotals([{ unitPrice: 10000, qty: 2 }], undefined, 4500).total).toBe(24500));
+});
+describe("envíos", () => {
+  it("zonas por CP", () => { expect(zoneOf("1425")).toBe("caba"); expect(zoneOf("1900")).toBe("gba"); expect(zoneOf("9000")).toBe("patagonia"); expect(zoneOf("12")).toBeNull(); });
+  it("más peso, más caro", () => expect(tariff("correo-argentino", "domicilio", "caba", 3000).price).toBeGreaterThan(tariff("correo-argentino", "domicilio", "caba", 500).price));
+  it("sucursal más barata que domicilio", () => expect(tariff("via-cargo", "sucursal", "centro", 800).price).toBeLessThan(tariff("via-cargo", "domicilio", "centro", 800).price));
 });
 describe("catálogo mock", () => {
   it("filtra por género", async () => { const r = await mockCatalog.listProducts({ gender: "hombre", limit: 100 }); expect(r.items.every((p) => p.gender === "hombre")).toBe(true); });

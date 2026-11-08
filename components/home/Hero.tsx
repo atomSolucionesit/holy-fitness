@@ -1,11 +1,9 @@
 import { Button, Img } from "@/components/ui";
-import { placeholder } from "@/lib/utils";
-export function Hero({ title, sub, tone, cta1, cta2, priority }: { title: string; sub: string; tone: string; cta1: [string, string]; cta2?: [string, string]; priority?: boolean }) {
+export function Hero({ title, sub, image, position = "50% 50%", cta1, cta2, priority }: { title: string; sub: string; image: string; position?: string; cta1: [string, string]; cta2?: [string, string]; priority?: boolean }) {
   return (
     <section className="relative isolate flex min-h-[78vh] items-end overflow-hidden bg-ink text-white">
-      <Img src={placeholder(title, tone, "l")} alt="" priority={priority} className="-z-10 opacity-70 max-md:hidden" />
-      <Img src={placeholder(title, tone, "v")} alt="" priority={priority} className="-z-10 opacity-70 md:hidden" />
-      <div className="absolute inset-0 -z-10 bg-gradient-to-t from-black/70 to-transparent" />
+      <Img src={image} alt="" priority={priority} className="-z-10" style={{ objectPosition: position }} />
+      <div className="absolute inset-0 -z-10 bg-gradient-to-t from-black/70 via-black/10 to-transparent" />
       <div className="mx-auto w-full max-w-[1600px] px-4 pb-12 lg:px-8 lg:pb-20">
         <h1 className="display h-hero max-w-5xl">{title}</h1>
         <p className="mt-4 max-w-md text-base">{sub}</p>

@@ -1,5 +1,5 @@
 import type { Badge, Category, Collection, ColorOption, Gender, Product, Variant } from "@/lib/domain/types";
-import { placeholder, slugify } from "@/lib/utils";
+import { slugify } from "@/lib/utils";
 
 const C = {
   negro: { name: "Negro", hex: "#111111", tone: "d9d9d9" },
@@ -62,6 +62,14 @@ const SEEDS: Seed[] = [
   ["Mat de Yoga Pilates 6mm", "accesorios", "gym", "6 mm", 28990, ["negro", "lila", "arena"], ["pilates"], ["flow"], { sizes: ONE }],
 ];
 
+const PHOTOS: Record<string, string> = {
+  "mujer/calzas": "m-calzas", "mujer/tops": "m-tops", "mujer/remeras": "m-remeras", "mujer/shorts": "m-shorts", "mujer/buzos": "m-buzos",
+  "mujer/camperas": "m-camperas", "mujer/joggers": "m-conjuntos", "mujer/conjuntos": "m-conjuntos",
+  "hombre/remeras": "h-remeras", "hombre/shorts": "h-shorts", "hombre/joggers": "h-joggers", "hombre/buzos": "h-buzos", "hombre/camperas": "h-camperas", "hombre/calzas": "h-joggers",
+  "accesorios/gorras": "a-gorras", "accesorios/mochilas": "a-mochilas", "accesorios/botellas": "a-botellas", "accesorios/medias": "a-medias", "accesorios/gym": "a-gym",
+};
+const photoFor = (gender: string, category: string) => `/img/${PHOTOS[`${gender}/${category}`] ?? "m-calzas"}.jpg`;
+
 function rnd(seed: number) { let s = seed; return () => ((s = (s * 9301 + 49297) % 233280) / 233280); }
 
 export const PRODUCTS: Product[] = SEEDS.map(([name, gender, category, fit, price, colors, activities, collections, opts], idx) => {
@@ -69,7 +77,7 @@ export const PRODUCTS: Product[] = SEEDS.map(([name, gender, category, fit, pric
   const sizes = opts?.sizes ?? CLOTHES;
   const colorOpts: ColorOption[] = colors.map((c) => ({
     name: C[c].name, hex: C[c].hex,
-    images: [placeholder(name, C[c].tone, "p", 1), placeholder(name, C[c].tone, "p", 2)],
+    images: [photoFor(gender, category)],
   }));
   const variants: Variant[] = [];
   colors.forEach((c) => sizes.forEach((s) => {
@@ -94,11 +102,11 @@ export const PRODUCTS: Product[] = SEEDS.map(([name, gender, category, fit, pric
 export const CATEGORIES: Category[] = Array.from(new Map(PRODUCTS.map((p) => [`${p.gender}/${p.category}`, { slug: p.category, name: p.category.charAt(0).toUpperCase() + p.category.slice(1), gender: p.gender }])).values());
 
 export const COLLECTIONS: Collection[] = [
-  { slug: "sculpt", name: "Sculpt", tagline: "Prendas que marcan y sostienen cada repetición.", image: placeholder("SCULPT", "dcdcdc", "l") },
-  { slug: "flow", name: "Flow", tagline: "Libertad de movimiento para pilates, yoga y descanso activo.", image: placeholder("FLOW", "e3dbef", "l") },
-  { slug: "impact", name: "Impact", tagline: "Livianas, rápidas y listas para correr.", image: placeholder("IMPACT", "c9d0bd", "l") },
-  { slug: "essentials", name: "Essentials", tagline: "Los básicos de todos los días.", image: placeholder("ESSENTIALS", "e6dccb", "l") },
-  { slug: "invierno", name: "Invierno", tagline: "Abrigo técnico para entrenar con frío.", image: placeholder("INVIERNO", "c5cbda", "l") },
+  { slug: "sculpt", name: "Sculpt", tagline: "Prendas que marcan y sostienen cada repetición.", image: "/img/m-calzas.jpg" },
+  { slug: "flow", name: "Flow", tagline: "Libertad de movimiento para pilates, yoga y descanso activo.", image: "/img/m-conjuntos.jpg" },
+  { slug: "impact", name: "Impact", tagline: "Livianas, rápidas y listas para correr.", image: "/img/h-shorts.jpg" },
+  { slug: "essentials", name: "Essentials", tagline: "Los básicos de todos los días.", image: "/img/h-remeras.jpg" },
+  { slug: "invierno", name: "Invierno", tagline: "Abrigo técnico para entrenar con frío.", image: "/img/h-camperas.jpg" },
 ];
 
 export const REVIEWS = [
