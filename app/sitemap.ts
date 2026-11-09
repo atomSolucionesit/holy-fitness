@@ -1,6 +1,6 @@
 import type { MetadataRoute } from "next";
 import { catalog } from "@/lib/providers";
-const site = process.env.NEXT_PUBLIC_SITE_URL ?? "http://localhost:3000";
+const site = process.env.NEXT_PUBLIC_SITE_URL || "http://localhost:3000";
 export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
   const [all, cols] = await Promise.all([catalog.listProducts({ limit: 500 }), catalog.listCollections()]);
   return [

@@ -15,7 +15,7 @@ COPY . .
 
 # Las variables NEXT_PUBLIC_* se incrustan en el bundle durante el build,
 # así que hay que pasarlas como build args (Dokploy: Environment > Build-time Arguments).
-ARG NEXT_PUBLIC_SITE_URL
+ARG NEXT_PUBLIC_SITE_URL=http://localhost:3000
 ARG NEXT_PUBLIC_SUPABASE_URL
 ARG NEXT_PUBLIC_SUPABASE_ANON_KEY
 ARG NEXT_PUBLIC_ANALYTICS_ENABLED=false

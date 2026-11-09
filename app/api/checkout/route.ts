@@ -55,7 +55,7 @@ export async function POST(req: Request) {
     shippingOption: option && { id: option.id, carrierName: option.carrierName, service: option.service, label: option.label, eta: option.eta },
     address: retiro ? undefined : { ...d.address!, zip: d.zip! },
   });
-  const site = process.env.NEXT_PUBLIC_SITE_URL ?? new URL(req.url).origin;
+  const site = process.env.NEXT_PUBLIC_SITE_URL || new URL(req.url).origin;
   const pay = paymentFor(d.paymentMethod);
   try {
     const redirectUrl = pay ? (await pay.start(order, site)).redirectUrl : `${site}/pedido/${order.id}`;
