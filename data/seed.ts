@@ -15,6 +15,7 @@ type CK = keyof typeof C;
 
 const CLOTHES = ["XS", "S", "M", "L", "XL"];
 const ONE = ["Único"];
+const SHOES = ["35", "36", "37", "38", "39", "40"];
 
 type Seed = [name: string, gender: Gender, category: string, fit: string, price: number, colors: CK[], activities: string[], collections: string[], opts?: { off?: number; badges?: Badge[]; sizes?: string[] }];
 
@@ -35,28 +36,28 @@ const SEEDS: Seed[] = [
   ["Campera Cortaviento Pack", "mujer", "camperas", "liviana", 76990, ["negro", "lila"], ["running"], ["invierno"], { off: 15 }],
   ["Jogger Cargo Relax", "mujer", "joggers", "relajado", 49990, ["gris", "oliva", "negro"], ["descanso"], ["essentials"] ],
   ["Conjunto Lounge Set", "mujer", "conjuntos", "relajado", 69990, ["arena", "gris"], ["descanso", "pilates"], ["flow"], { badges: ["ÚLTIMAS UNIDADES"] }],
-  ["Remera Oversized Holy Hombre", "hombre", "remeras", "oversized", 31990, ["negro", "blanco", "arena"], ["lifting", "descanso"], ["essentials"], { badges: ["MÁS VENDIDO"] }],
-  ["Remera Muscle Fit", "hombre", "remeras", "muscle fit", 29990, ["negro", "gris", "azul"], ["lifting"], ["sculpt"], { badges: ["NUEVO"] }],
-  ["Remera Dry Running", "hombre", "remeras", "slim fit", 26990, ["negro", "oliva"], ["running"], ["impact"] ],
-  ["Musculosa Stringer", "hombre", "remeras", "ajuste holgado", 22990, ["negro", "blanco"], ["lifting"], ["sculpt"], { off: 20 }],
-  ["Short Training 7\"", "hombre", "shorts", "regular", 33990, ["negro", "gris", "azul"], ["lifting", "hiit"], ["essentials"] ],
-  ["Short Running Doble Capa", "hombre", "shorts", "liviano", 31990, ["negro", "oliva"], ["running"], ["impact"], { badges: ["NUEVO"] }],
-  ["Short Sweat Algodón", "hombre", "shorts", "relajado", 28990, ["gris", "arena"], ["descanso"], ["essentials"] ],
-  ["Jogger Tapered Training", "hombre", "joggers", "tapered", 51990, ["negro", "gris", "oliva"], ["lifting", "descanso"], ["essentials"], { badges: ["MÁS VENDIDO"] }],
-  ["Jogger Cargo Utility", "hombre", "joggers", "relajado", 55990, ["oliva", "negro"], ["descanso"], ["invierno"] ],
-  ["Calza Compresión Larga", "hombre", "calzas", "compresión", 39990, ["negro", "azul"], ["running", "hiit"], ["impact"] ],
-  ["Buzo Hoodie Holy", "hombre", "buzos", "oversized", 62990, ["negro", "gris", "bordo"], ["descanso"], ["invierno"], { badges: ["NUEVO"] }],
-  ["Buzo Crewneck Fleece", "hombre", "buzos", "regular", 57990, ["gris", "azul"], ["descanso"], ["invierno"], { off: 20 }],
-  ["Campera Rompevientos", "hombre", "camperas", "liviana", 79990, ["negro", "oliva"], ["running"], ["invierno"], { badges: ["ÚLTIMAS UNIDADES"] }],
-  ["Chaleco Puffer", "hombre", "camperas", "regular", 84990, ["negro", "arena"], ["descanso"], ["invierno"] ],
+  ["Calza Flare Yoga", "mujer", "calzas", "oxford", 49990, ["negro", "gris", "bordo"], ["pilates", "descanso"], ["flow"], { badges: ["NUEVO"] }],
+  ["Top Cruzado Pilates", "mujer", "tops", "soporte ligero", 29990, ["lila", "arena", "negro"], ["pilates"], ["flow"] ],
+  ["Pollera Short Training", "mujer", "shorts", "con short interno", 32990, ["negro", "blanco", "lila"], ["running", "hiit"], ["impact"], { badges: ["NUEVO"] }],
+  ["Zapatilla Running Cloud", "zapatillas", "running", "amortiguación alta", 119990, ["negro", "lila", "blanco"], ["running"], ["impact"], { sizes: SHOES, badges: ["MÁS VENDIDO"] }],
+  ["Zapatilla Running Tempo", "zapatillas", "running", "liviana", 109990, ["negro", "bordo"], ["running", "hiit"], ["impact"], { sizes: SHOES, badges: ["NUEVO"] }],
+  ["Zapatilla Trail Grip", "zapatillas", "running", "agarre extra", 129990, ["oliva", "negro"], ["running"], ["invierno"], { sizes: SHOES, off: 15 }],
+  ["Zapatilla Training Lift", "zapatillas", "training", "suela plana", 99990, ["blanco", "negro", "arena"], ["lifting"], ["sculpt"], { sizes: SHOES, badges: ["MÁS VENDIDO"] }],
+  ["Zapatilla Training HIIT", "zapatillas", "training", "estable", 104990, ["negro", "lila"], ["hiit", "lifting"], ["sculpt"], { sizes: SHOES }],
+  ["Zapatilla Studio Flex", "zapatillas", "training", "flexible", 89990, ["arena", "lila", "blanco"], ["pilates"], ["flow"], { sizes: SHOES, badges: ["NUEVO"] }],
+  ["Zapatilla Running Daily", "zapatillas", "running", "uso diario", 99990, ["gris", "lila"], ["running"], ["essentials"], { sizes: SHOES }],
+  ["Zapatilla Urbana Platform", "zapatillas", "urbanas", "plataforma", 94990, ["blanco", "arena"], ["descanso"], ["essentials"], { sizes: SHOES, badges: ["NUEVO"] }],
+  ["Zapatilla Urbana Classic", "zapatillas", "urbanas", "clásica", 84990, ["blanco", "negro", "gris"], ["descanso"], ["essentials"], { sizes: SHOES, off: 20 }],
+  ["Zapatilla Urbana Knit", "zapatillas", "urbanas", "tejido elástico", 79990, ["negro", "gris", "lila"], ["descanso"], ["essentials"], { sizes: SHOES }],
+  ["Zapatilla Urbana Suede", "zapatillas", "urbanas", "gamuza", 99990, ["arena", "bordo"], ["descanso"], ["invierno"], { sizes: SHOES, badges: ["ÚLTIMAS UNIDADES"] }],
   ["Gorra Holy Dad Hat", "accesorios", "gorras", "ajustable", 17990, ["negro", "arena", "blanco"], ["descanso"], ["essentials"], { sizes: ONE, badges: ["MÁS VENDIDO"] }],
   ["Gorra Running Mesh", "accesorios", "gorras", "liviana", 18990, ["negro", "lila"], ["running"], ["impact"], { sizes: ONE }],
   ["Mochila Gym 25L", "accesorios", "mochilas", "25 litros", 46990, ["negro", "oliva"], ["lifting"], ["essentials"], { sizes: ONE, badges: ["NUEVO"] }],
   ["Bolso Duffle 40L", "accesorios", "mochilas", "40 litros", 59990, ["negro", "gris"], ["lifting", "hiit"], ["essentials"], { sizes: ONE }],
   ["Botella Térmica 750ml", "accesorios", "botellas", "750 ml", 21990, ["negro", "blanco", "lila"], ["lifting", "running"], ["essentials"], { sizes: ONE }],
   ["Shaker Holy 600ml", "accesorios", "botellas", "600 ml", 12990, ["negro", "blanco"], ["lifting"], ["essentials"], { sizes: ONE, off: 20 }],
-  ["Medias Crew x3", "accesorios", "medias", "pack x3", 14990, ["blanco", "negro", "gris"], ["running", "lifting"], ["essentials"], { sizes: ["36-40", "40-44"] }],
-  ["Medias Invisibles x3", "accesorios", "medias", "pack x3", 12990, ["blanco", "negro"], ["running", "hiit"], ["essentials"], { sizes: ["36-40", "40-44"] }],
+  ["Medias Crew x3", "accesorios", "medias", "pack x3", 14990, ["blanco", "negro", "gris"], ["running", "lifting"], ["essentials"], { sizes: ["35-38", "38-41"] }],
+  ["Medias Invisibles x3", "accesorios", "medias", "pack x3", 12990, ["blanco", "negro"], ["running", "hiit"], ["essentials"], { sizes: ["35-38", "38-41"] }],
   ["Straps de Levantamiento", "accesorios", "gym", "agarre", 15990, ["negro"], ["lifting"], ["sculpt"], { sizes: ONE }],
   ["Banda Elástica Set x3", "accesorios", "gym", "resistencia", 19990, ["negro", "lila"], ["pilates", "hiit"], ["flow"], { sizes: ONE, badges: ["NUEVO"] }],
   ["Mat de Yoga Pilates 6mm", "accesorios", "gym", "6 mm", 28990, ["negro", "lila", "arena"], ["pilates"], ["flow"], { sizes: ONE }],
@@ -65,7 +66,7 @@ const SEEDS: Seed[] = [
 const PHOTOS: Record<string, string> = {
   "mujer/calzas": "m-calzas", "mujer/tops": "m-tops", "mujer/remeras": "m-remeras", "mujer/shorts": "m-shorts", "mujer/buzos": "m-buzos",
   "mujer/camperas": "m-camperas", "mujer/joggers": "m-conjuntos", "mujer/conjuntos": "m-conjuntos",
-  "hombre/remeras": "h-remeras", "hombre/shorts": "h-shorts", "hombre/joggers": "h-joggers", "hombre/buzos": "h-buzos", "hombre/camperas": "h-camperas", "hombre/calzas": "h-joggers",
+  "zapatillas/running": "z-running", "zapatillas/training": "z-training", "zapatillas/urbanas": "z-urbanas",
   "accesorios/gorras": "a-gorras", "accesorios/mochilas": "a-mochilas", "accesorios/botellas": "a-botellas", "accesorios/medias": "a-medias", "accesorios/gym": "a-gym",
 };
 const photoFor = (gender: string, category: string) => `/img/${PHOTOS[`${gender}/${category}`] ?? "m-calzas"}.jpg`;
@@ -92,8 +93,12 @@ export const PRODUCTS: Product[] = SEEDS.map(([name, gender, category, fit, pric
     price: off ? Math.round((price * (100 - off)) / 100 / 10) * 10 : price,
     compareAtPrice: off ? price : undefined,
     badges: opts?.badges ?? [],
-    description: `${name}. Diseñada en Argentina para acompañarte desde el primer set hasta el último. Tela de alto rendimiento, costuras planas y un calce pensado para moverte sin pensar en la ropa.`,
-    composition: "88% poliéster reciclado, 12% elastano. Lavar a máquina en frío, del revés. No usar blanqueador. No planchar sobre estampados.",
+    description: gender === "zapatillas"
+      ? `${name}. Diseñada para el pie femenino, con horma más angosta en el talón, capellada respirable y una suela pensada para acompañarte en cada entrenamiento.`
+      : `${name}. Diseñada en Argentina para acompañarte desde el primer set hasta el último. Tela de alto rendimiento, costuras planas y un calce pensado para moverte sin pensar en la ropa.`,
+    composition: gender === "zapatillas"
+      ? "Capellada de tejido técnico y sintético, plantilla removible de EVA, suela de caucho. Limpiar con paño húmedo; no lavar a máquina ni secar al sol directo."
+      : "88% poliéster reciclado, 12% elastano. Lavar a máquina en frío, del revés. No usar blanqueador. No planchar sobre estampados.",
     colors: colorOpts, variants, rating, reviewCount: 8 + Math.floor(r() * 240),
     createdAt: new Date(Date.UTC(2026, 9, 28) - idx * 4 * 86400000).toISOString(), sales: Math.floor(r() * 900),
     };
@@ -104,14 +109,14 @@ export const CATEGORIES: Category[] = Array.from(new Map(PRODUCTS.map((p) => [`$
 export const COLLECTIONS: Collection[] = [
   { slug: "sculpt", name: "Sculpt", tagline: "Prendas que marcan y sostienen cada repetición.", image: "/img/m-calzas.jpg" },
   { slug: "flow", name: "Flow", tagline: "Libertad de movimiento para pilates, yoga y descanso activo.", image: "/img/m-conjuntos.jpg" },
-  { slug: "impact", name: "Impact", tagline: "Livianas, rápidas y listas para correr.", image: "/img/h-shorts.jpg" },
-  { slug: "essentials", name: "Essentials", tagline: "Los básicos de todos los días.", image: "/img/h-remeras.jpg" },
-  { slug: "invierno", name: "Invierno", tagline: "Abrigo técnico para entrenar con frío.", image: "/img/h-camperas.jpg" },
+  { slug: "impact", name: "Impact", tagline: "Livianas, rápidas y listas para correr.", image: "/img/m-shorts.jpg" },
+  { slug: "essentials", name: "Essentials", tagline: "Los básicos de todos los días.", image: "/img/m-remeras.jpg" },
+  { slug: "invierno", name: "Invierno", tagline: "Abrigo técnico para entrenar con frío.", image: "/img/m-camperas.jpg" },
 ];
 
 export const REVIEWS = [
   { author: "Camila R.", rating: 5, title: "Súper cómoda", body: "El calce es perfecto y no se transparenta. Ya pedí otra." },
-  { author: "Lucas P.", rating: 5, title: "Excelente calidad", body: "La tela se siente premium y aguantó muy bien los lavados." },
+  { author: "Lucía P.", rating: 5, title: "Excelente calidad", body: "La tela se siente premium y aguantó muy bien los lavados." },
   { author: "Sofía M.", rating: 4, title: "Muy buena", body: "Talla fiel. Me hubiera gustado que viniera en más colores." },
-  { author: "Martín G.", rating: 5, title: "Llegó rapidísimo", body: "Compré online y en dos días lo tenía en casa. Recomendable." },
+  { author: "Martina G.", rating: 5, title: "Llegó rapidísimo", body: "Compré online y en dos días lo tenía en casa. Recomendable." },
 ];

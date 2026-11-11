@@ -20,7 +20,7 @@ describe("envíos", () => {
   it("sucursal más barata que domicilio", () => expect(tariff("via-cargo", "sucursal", "centro", 800).price).toBeLessThan(tariff("via-cargo", "domicilio", "centro", 800).price));
 });
 describe("catálogo mock", () => {
-  it("filtra por género", async () => { const r = await mockCatalog.listProducts({ gender: "hombre", limit: 100 }); expect(r.items.every((p) => p.gender === "hombre")).toBe(true); });
+  it("filtra por género", async () => { const r = await mockCatalog.listProducts({ gender: "zapatillas", limit: 100 }); expect(r.items.every((p) => p.gender === "zapatillas")).toBe(true); });
   it("busca sin tildes", async () => { const r = await mockCatalog.search("bordo"); expect(r.products.length).toBeGreaterThan(0); });
   it("al menos 40 productos", async () => { expect((await mockCatalog.listProducts({ limit: 100 })).total).toBeGreaterThanOrEqual(40); });
 });

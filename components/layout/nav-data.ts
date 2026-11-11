@@ -5,12 +5,11 @@ export const NAV = {
     { title: "Colecciones", links: [["Sculpt", "/coleccion/sculpt"], ["Flow", "/coleccion/flow"], ["Impact", "/coleccion/impact"], ["Invierno", "/coleccion/invierno"]] },
     { title: "Por actividad", links: [["Lifting", "/mujer?actividad=lifting"], ["Running", "/mujer?actividad=running"], ["HIIT", "/mujer?actividad=hiit"], ["Pilates", "/mujer?actividad=pilates"]] },
   ], feature: { title: "Sculpt", href: "/coleccion/sculpt", image: "/img/m-calzas.jpg" } },
-  hombre: { label: "Hombre", cols: [
-    { title: "Tendencias", links: [["Novedades", "/hombre?orden=novedades"], ["Más vendidos", "/hombre?orden=mas-vendidos"], ["Ofertas", "/hombre?oferta=1"]] },
-    { title: "Prendas", links: [["Remeras", "/hombre/remeras"], ["Shorts", "/hombre/shorts"], ["Joggers", "/hombre/joggers"], ["Buzos", "/hombre/buzos"], ["Camperas", "/hombre/camperas"], ["Calzas", "/hombre/calzas"]] },
-    { title: "Colecciones", links: [["Essentials", "/coleccion/essentials"], ["Impact", "/coleccion/impact"], ["Invierno", "/coleccion/invierno"]] },
-    { title: "Por actividad", links: [["Lifting", "/hombre?actividad=lifting"], ["Running", "/hombre?actividad=running"], ["HIIT", "/hombre?actividad=hiit"]] },
-  ], feature: { title: "Invierno", href: "/coleccion/invierno", image: "/img/h-camperas.jpg" } },
+  zapatillas: { label: "Zapatillas", cols: [
+    { title: "Tendencias", links: [["Novedades", "/zapatillas?orden=novedades"], ["Más vendidas", "/zapatillas?orden=mas-vendidos"], ["Ofertas", "/zapatillas?oferta=1"]] },
+    { title: "Tipo", links: [["Running", "/zapatillas/running"], ["Training", "/zapatillas/training"], ["Urbanas", "/zapatillas/urbanas"]] },
+    { title: "Por actividad", links: [["Running", "/zapatillas?actividad=running"], ["Lifting", "/zapatillas?actividad=lifting"], ["HIIT", "/zapatillas?actividad=hiit"], ["Pilates", "/zapatillas?actividad=pilates"]] },
+  ], feature: { title: "Running", href: "/zapatillas/running", image: "/img/z-running.jpg" } },
   accesorios: { label: "Accesorios", cols: [
     { title: "Accesorios", links: [["Gorras", "/accesorios/gorras"], ["Mochilas y bolsos", "/accesorios/mochilas"], ["Botellas", "/accesorios/botellas"], ["Medias", "/accesorios/medias"], ["Gym", "/accesorios/gym"]] },
     { title: "Última oportunidad", links: [["Ofertas", "/accesorios?oferta=1"]] },

@@ -9,7 +9,7 @@ const site = process.env.NEXT_PUBLIC_SITE_URL || "http://localhost:3000";
 export const metadata: Metadata = {
   metadataBase: new URL(site),
   title: { default: "Holy Fitness | Ropa deportiva en Argentina", template: "%s | Holy Fitness" },
-  description: "Ropa deportiva para mujer y hombre. Envíos a todo el país, cuotas sin interés y retiro en nuestro local.",
+  description: "Ropa deportiva y zapatillas para mujer. Envíos a todo el país, cuotas sin interés y retiro en nuestro local.",
   openGraph: { type: "website", locale: "es_AR", siteName: "Holy Fitness" },
 };
 

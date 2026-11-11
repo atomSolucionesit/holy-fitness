@@ -2,7 +2,7 @@ import type { Gender, ProductQuery } from "@/lib/domain/types";
 type SP = Record<string, string | string[] | undefined>;
 const arr = (v: string | string[] | undefined) => (v ? (Array.isArray(v) ? v : v.split(",")).filter(Boolean) : undefined);
 const one = (v: string | string[] | undefined) => (Array.isArray(v) ? v[0] : v);
-export const GENDERS: Gender[] = ["mujer", "hombre", "accesorios"];
+export const GENDERS: Gender[] = ["mujer", "zapatillas", "accesorios"];
 export function parseQuery(sp: SP, base: ProductQuery = {}): ProductQuery {
   const num = (k: string) => { const n = parseInt(one(sp[k]) ?? "", 10); return Number.isNaN(n) ? undefined : n; };
   return {

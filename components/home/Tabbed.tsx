@@ -9,9 +9,9 @@ export function Tabbed({ tabs, cols = 4, ratio = "aspect-[3/4]" }: { tabs: Recor
   const keys = Object.keys(tabs); const [k, setK] = useState(keys[0]!);
   return (
     <div>
-      <div role="tablist" className="mb-6 flex gap-2">
+      {keys.length > 1 && <div role="tablist" className="mb-6 flex gap-2">
         {keys.map((x) => <button key={x} role="tab" aria-selected={k === x} onClick={() => setK(x)} className={cn("label h-10 border border-ink px-5", k === x ? "bg-ink text-white" : "hover:bg-surface")}>{x}</button>)}
-      </div>
+      </div>}
       <div className={cn("grid grid-cols-2 gap-3", cols === 4 && "lg:grid-cols-4", cols === 3 && "lg:grid-cols-3", cols === 5 && "lg:grid-cols-5")}>
         {tabs[k]!.map((t) => (
           <Link key={t.title} href={t.href} className={cn("group relative block overflow-hidden bg-surface", ratio)}>

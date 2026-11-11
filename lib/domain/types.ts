@@ -1,4 +1,4 @@
-export type Gender = "mujer" | "hombre" | "accesorios";
+export type Gender = "mujer" | "zapatillas" | "accesorios";
 export type Badge = "NUEVO" | "MÁS VENDIDO" | "ÚLTIMAS UNIDADES";
 
 export interface ColorOption { name: string; hex: string; images: string[] }

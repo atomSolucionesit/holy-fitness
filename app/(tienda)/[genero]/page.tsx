@@ -6,7 +6,12 @@ import type { Gender } from "@/lib/domain/types";
 
 type P = { params: Promise<{ genero: string }>; searchParams: Promise<Record<string, string | string[] | undefined>> };
 const cap = (s: string) => s.charAt(0).toUpperCase() + s.slice(1);
-export async function generateMetadata({ params }: P): Promise<Metadata> { const { genero } = await params; return { title: `Ropa deportiva ${cap(genero)}`, description: `Comprá ropa deportiva de ${genero} en Holy Fitness.` }; }
+const META: Record<string, [string, string]> = {
+  mujer: ["Ropa deportiva para mujer", "Comprá ropa deportiva para mujer en Holy Fitness."],
+  zapatillas: ["Zapatillas deportivas para mujer", "Comprá zapatillas de running, training y urbanas para mujer en Holy Fitness."],
+  accesorios: ["Accesorios deportivos", "Comprá accesorios para entrenar en Holy Fitness."],
+};
+export async function generateMetadata({ params }: P): Promise<Metadata> { const { genero } = await params; const [title, description] = META[genero] ?? [cap(genero), ""]; return { title, description }; }
 export default async function Page({ params, searchParams }: P) {
   const { genero } = await params; const sp = await searchParams;
   if (!GENDERS.includes(genero as Gender)) notFound();
