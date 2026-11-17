@@ -1,6 +1,7 @@
 import type { Order, OrderItem, Product } from "./types";
 
 export const FREE_SHIPPING_FROM = 120000;
+export const NEWSLETTER_ENABLED = false;
 export const WELCOME_COUPON = { code: "BIENVENIDA10", pct: 10 };
 export const COUPONS: Record<string, number> = { BIENVENIDA10: 10, HOLY15: 15 };
 
@@ -9,10 +10,18 @@ export function couponDiscount(code: string | undefined, subtotal: number) {
   const pct = COUPONS[code.toUpperCase()];
   return pct ? Math.round((subtotal * pct) / 100) : 0;
 }
-export function orderTotals(items: Pick<OrderItem, "unitPrice" | "qty">[], coupon: string | undefined, shipping: number) {
+export function orderTotals(
+  items: Pick<OrderItem, "unitPrice" | "qty">[],
+  coupon: string | undefined,
+  shipping: number,
+  explicitDiscount?: number,
+) {
   const subtotal = items.reduce((a, i) => a + i.unitPrice * i.qty, 0);
-  const discount = couponDiscount(coupon, subtotal);
-  return { subtotal, discount, shipping, total: subtotal - discount + shipping };
+  const discount =
+    explicitDiscount !== undefined
+      ? Math.min(subtotal, Math.max(0, Math.round(explicitDiscount)))
+      : couponDiscount(coupon, subtotal);
+  return { subtotal, discount, shipping, total: Math.max(0, subtotal - discount) + shipping };
 }
 export const installments = (price: number, n = 3) => Math.round(price / n);
 export const stockOf = (p: Product, color?: string, size?: string) =>

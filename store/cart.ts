@@ -4,11 +4,11 @@ import { persist } from "zustand/middleware";
 
 export interface CartLine { variantId: string; slug: string; name: string; color: string; size: string; price: number; image: string; qty: number; max: number }
 interface CartState {
-  lines: CartLine[]; coupon?: string; open: boolean; zip: string; shippingId?: string;
+  lines: CartLine[]; coupon?: string; couponDiscount?: number; open: boolean; zip: string; shippingId?: string;
   add: (l: Omit<CartLine, "qty">, qty?: number) => void;
   setQty: (id: string, qty: number) => void; remove: (id: string) => void;
   setZip: (z: string) => void; setShippingId: (id?: string) => void;
-  setCoupon: (c?: string) => void; clear: () => void; setOpen: (o: boolean) => void;
+  setCoupon: (c?: string, discount?: number) => void; clear: () => void; setOpen: (o: boolean) => void;
 }
 export const useCart = create<CartState>()(persist((set) => ({
   lines: [], open: false, zip: "",
@@ -20,8 +20,10 @@ export const useCart = create<CartState>()(persist((set) => ({
   setQty: (id, qty) => set((s) => ({ lines: s.lines.map((x) => x.variantId === id ? { ...x, qty: Math.max(1, Math.min(qty, x.max)) } : x) })),
   remove: (id) => set((s) => ({ lines: s.lines.filter((x) => x.variantId !== id) })),
   setZip: (zip) => set({ zip }), setShippingId: (shippingId) => set({ shippingId }),
-  setCoupon: (coupon) => set({ coupon }), clear: () => set({ lines: [], coupon: undefined }), setOpen: (open) => set({ open }),
-}), { name: "hf-cart", partialize: (s) => ({ lines: s.lines, coupon: s.coupon, zip: s.zip, shippingId: s.shippingId }) }));
+  setCoupon: (coupon, couponDiscount) => set({ coupon, couponDiscount }),
+  clear: () => set({ lines: [], coupon: undefined, couponDiscount: undefined }),
+  setOpen: (open) => set({ open }),
+}), { name: "hf-cart", partialize: (s) => ({ lines: s.lines, coupon: s.coupon, couponDiscount: s.couponDiscount, zip: s.zip, shippingId: s.shippingId }) }));
 
 export const cartCount = (l: CartLine[]) => l.reduce((a, x) => a + x.qty, 0);
 export const cartSubtotal = (l: CartLine[]) => l.reduce((a, x) => a + x.qty * x.price, 0);

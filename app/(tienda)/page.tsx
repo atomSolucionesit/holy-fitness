@@ -6,6 +6,7 @@ import { ProductCard } from "@/components/product/ProductCard";
 import { SectionTitle, Button } from "@/components/ui";
 import { Tabbed, type Tile } from "@/components/home/Tabbed";
 import { NewsletterForm } from "@/components/home/NewsletterForm";
+import { NEWSLETTER_ENABLED } from "@/lib/domain/rules";
 
 export const revalidate = 300;
 
@@ -21,12 +22,19 @@ export default async function Home() {
     catalog.listProducts({ collection: "invierno", limit: 8 }),
     catalog.listProducts({ sort: "mas-vendidos", limit: 8 }),
   ]);
+  const featuredItems = sculpt.items.length > 0 ? sculpt.items : popular.items;
+  const featuredTitle = sculpt.items.length > 0 ? "Sculpt" : "Destacados";
+  const featuredHref = sculpt.items.length > 0 ? "/coleccion/sculpt" : "/mujer";
   return (
     <>
-      <Hero priority title="Entrená sin excusas" sub="Nueva colección Sculpt. Hecha en Argentina para tu mejor versión." image="/img/hero-mujer.jpg" position="68% 50%" cta1={["Comprar ropa", "/mujer"]} cta2={["Ver zapatillas", "/zapatillas"]} />
-      <section className="mx-auto mt-12 max-w-[1600px] px-4 lg:px-8"><SectionTitle href="/coleccion/sculpt">Sculpt</SectionTitle><Carousel>{sculpt.items.map((p) => <ProductCard key={p.id} p={p} />)}</Carousel></section>
+      <Hero priority title="Estilo y comodidad" sub="Nueva colección Sculpt. Hecha en Argentina para tu mejor versión." image="/img/hero-mujer.jpg" position="68% 50%" cta1={["Comprar ropa", "/mujer"]} cta2={["Ver zapatillas", "/zapatillas"]} />
+      {featuredItems.length > 0 && (
+        <section className="mx-auto mt-12 max-w-[1600px] px-4 lg:px-8"><SectionTitle href={featuredHref}>{featuredTitle}</SectionTitle><Carousel>{featuredItems.map((p) => <ProductCard key={p.id} p={p} />)}</Carousel></section>
+      )}
       <div className="mt-16"><Hero title="Frío no es excusa" sub="Abrigo técnico para entrenar todo el año." image="/img/hero-invierno.jpg" position="55% 50%" cta1={["Ver colección Invierno", "/coleccion/invierno"]} /></div>
-      <section className="mx-auto mt-12 max-w-[1600px] px-4 lg:px-8"><SectionTitle href="/coleccion/invierno">Invierno</SectionTitle><Carousel>{invierno.items.map((p) => <ProductCard key={p.id} p={p} />)}</Carousel></section>
+      {invierno.items.length > 0 && (
+        <section className="mx-auto mt-12 max-w-[1600px] px-4 lg:px-8"><SectionTitle href="/coleccion/invierno">Invierno</SectionTitle><Carousel>{invierno.items.map((p) => <ProductCard key={p.id} p={p} />)}</Carousel></section>
+      )}
       <section className="mx-auto mt-20 max-w-[1600px] px-4 lg:px-8">
         <SectionTitle>Lo más elegido</SectionTitle>
         <Tabbed tabs={{
@@ -34,9 +42,11 @@ export default async function Home() {
           Zapatillas: trending("zapatillas", [["Running", "Amortiguación y liviandad", "/running", "z-running"], ["Training", "Estables para entrenar", "/training", "z-training"], ["Urbanas", "Para el día a día", "/urbanas", "z-urbanas"]]),
         }} />
       </section>
-      <section className="mt-20 bg-accent py-16 text-accent-ink">
-        <div className="mx-auto max-w-2xl px-4 text-center"><h2 className="display h-section">10% OFF en tu primera compra</h2><p className="mt-3">Sumate al newsletter y recibí tu código de bienvenida.</p><div className="mx-auto max-w-md"><NewsletterForm /></div></div>
-      </section>
+      {NEWSLETTER_ENABLED && (
+        <section className="mt-20 bg-accent py-16 text-accent-ink">
+          <div className="mx-auto max-w-2xl px-4 text-center"><h2 className="display h-section">10% OFF en tu primera compra</h2><p className="mt-3">Sumate al newsletter y recibí tu código de bienvenida.</p><div className="mx-auto max-w-md"><NewsletterForm /></div></div>
+        </section>
+      )}
       <section className="mx-auto mt-20 max-w-[1600px] px-4 lg:px-8"><SectionTitle>¿Cómo entrenás?</SectionTitle><Tabbed cols={5} ratio="aspect-[3/4]" tabs={{ Ropa: acts("mujer"), Zapatillas: acts("zapatillas") }} /></section>
       <section className="mx-auto mt-20 max-w-[1600px] px-4 lg:px-8"><SectionTitle href="/mujer?orden=mas-vendidos">Popular ahora</SectionTitle><Carousel>{popular.items.map((p) => <ProductCard key={p.id} p={p} />)}</Carousel></section>
       <section className="mx-auto mt-20 max-w-[1600px] px-4 lg:px-8">

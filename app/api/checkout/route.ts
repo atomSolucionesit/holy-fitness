@@ -2,6 +2,7 @@ import { z } from "zod";
 import { catalog, orders } from "@/lib/providers";
 import { inventory } from "@/lib/providers";
 import { orderTotals } from "@/lib/domain/rules";
+import { nexusGetPaymentConfig, nexusValidateCoupon } from "@/lib/providers/nexus";
 import { quoteForCart } from "@/lib/shipping/cart";
 import { etaText } from "@/lib/shipping/types";
 import { paymentFor } from "@/lib/payments";
@@ -26,7 +27,6 @@ export async function POST(req: Request) {
   const d = parsed.data;
   const retiro = d.shippingId === "retiro";
   if (!retiro && (!d.zip || !d.address)) return Response.json({ error: "Completá los datos de envío" }, { status: 400 });
-  if (!retiro && d.shippingId.endsWith("-domicilio") && !(d.address?.street && d.address.street.length >= 3)) return Response.json({ error: "Ingresá calle y número" }, { status: 400 });
   if (d.paymentMethod === "local" && !retiro) return Response.json({ error: "El pago en el local es solo con retiro" }, { status: 400 });
 
   // El servidor recalcula precios y verifica stock: nunca se confía en el cliente.
@@ -46,12 +46,47 @@ export async function POST(req: Request) {
       const q = await quoteForCart(d.items, d.zip!, d.coupon);
       const o = q.options.find((x) => x.id === d.shippingId);
       if (!o) return Response.json({ error: "La opción de envío elegida ya no está disponible" }, { status: 409 });
+      if (o.service === "domicilio" && !(d.address?.street && d.address.street.length >= 3)) {
+        return Response.json({ error: "Ingresá calle y número" }, { status: 400 });
+      }
       option = { id: o.id, carrierName: o.carrierName, service: o.service, label: o.label, eta: etaText(o), price: o.price };
     } catch { return Response.json({ error: "No pudimos cotizar el envío. Probá de nuevo." }, { status: 502 }); }
   }
-  const totals = orderTotals(items, d.coupon, option?.price ?? 0);
+  let explicitDiscount: number | undefined;
+  const cleanCoupon = d.coupon?.trim() ? d.coupon.trim().toUpperCase() : undefined;
+  if (cleanCoupon && process.env.CATALOG_SOURCE === "nexus") {
+    const couponCheck = await nexusValidateCoupon(cleanCoupon, d.items, true);
+    if (!couponCheck.isValid) {
+      return Response.json({ error: couponCheck.message || "El cupón ingresado no es válido" }, { status: 400 });
+    }
+    explicitDiscount = couponCheck.discount;
+  }
+
+  let paymentDiscountAmount = 0;
+  if (process.env.CATALOG_SOURCE === "nexus" || process.env.ORDERS_SOURCE === "nexus") {
+    const payCfg = await nexusGetPaymentConfig().catch(() => null);
+    if (payCfg) {
+      const mCfg = payCfg.methods.find((m) => m.method === d.paymentMethod);
+      if (mCfg && !mCfg.enabled) {
+        return Response.json({ error: "El medio de pago elegido no está habilitado" }, { status: 400 });
+      }
+      if (mCfg && mCfg.discountPercent > 0) {
+        const subAfterCoupon = Math.max(
+          0,
+          items.reduce((sum, i) => sum + i.unitPrice * i.qty, 0) - (explicitDiscount ?? 0),
+        );
+        paymentDiscountAmount = Math.round((subAfterCoupon * mCfg.discountPercent) / 100);
+      }
+    }
+  }
+
+  const combinedDiscount =
+    explicitDiscount !== undefined || paymentDiscountAmount > 0
+      ? (explicitDiscount ?? 0) + paymentDiscountAmount
+      : undefined;
+  const totals = orderTotals(items, cleanCoupon, option?.price ?? 0, combinedDiscount);
   const order = await orders.createOrder({
-    items, ...totals, couponCode: d.coupon, shippingMethod: retiro ? "retiro" : "envio", paymentMethod: d.paymentMethod, customer: d.customer,
+    items, ...totals, couponCode: cleanCoupon, shippingMethod: retiro ? "retiro" : "envio", paymentMethod: d.paymentMethod, customer: d.customer,
     shippingOption: option && { id: option.id, carrierName: option.carrierName, service: option.service, label: option.label, eta: option.eta },
     address: retiro ? undefined : { ...d.address!, zip: d.zip! },
   });
