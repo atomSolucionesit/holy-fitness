@@ -820,10 +820,16 @@ async function fetchAllPublishedFromNexus(noStore = false): Promise<{
   const loadPromise = (async (): Promise<CatalogSnapshot> => {
     const { companyId } = getNexusConfig();
     const pageSize = 100;
-    const firstPage = await nexusFetch<NexusEcommerceResponse>(
-      `/products/ecommerce/${companyId}?page=1&size=${pageSize}`,
-      { cache: "no-store" },
-    );
+    const [firstPage, categoriesRes] = await Promise.all([
+      nexusFetch<NexusEcommerceResponse>(
+        `/products/ecommerce/${companyId}?page=1&size=${pageSize}`,
+        { cache: "no-store" },
+      ),
+      nexusAuthFetch<{
+        info?: NexusCategory[] | { data?: NexusCategory[] };
+        data?: NexusCategory[];
+      }>("/categories?page=1&size=100", { cache: "no-store" }).catch(() => null),
+    ]);
 
     const rawList: NexusProductRaw[] = [...(firstPage?.info?.data ?? [])];
     const totalPages = Math.min(10, Number(firstPage?.info?.meta?.pages ?? 1));
@@ -842,6 +848,36 @@ async function fetchAllPublishedFromNexus(noStore = false): Promise<{
       }
     }
 
+    const nexusCategoriesRaw: NexusCategory[] = Array.isArray(categoriesRes?.info)
+      ? categoriesRes.info
+      : Array.isArray(categoriesRes?.info?.data)
+        ? categoriesRes.info.data
+        : Array.isArray(categoriesRes?.data)
+          ? categoriesRes.data
+          : [];
+
+    // Mapa auxiliar con la imagen real de cada categoría cargada en Nexus
+    const nexusCategoryImageByKey = new Map<string, string>();
+    for (const nc of nexusCategoriesRaw) {
+      const imgUrl = resolveNexusAssetUrl(nc.image);
+      if (imgUrl) {
+        if (nc.slug) nexusCategoryImageByKey.set(slugify(nc.slug), imgUrl);
+        nexusCategoryImageByKey.set(slugify(nc.name), imgUrl);
+      }
+    }
+    for (const raw of rawList) {
+      if (raw.published === false) continue;
+      for (const cp of raw.CategoryProduct ?? []) {
+        const nc = cp.category;
+        if (!nc) continue;
+        const imgUrl = resolveNexusAssetUrl(nc.image);
+        if (imgUrl) {
+          if (nc.slug) nexusCategoryImageByKey.set(slugify(nc.slug), imgUrl);
+          nexusCategoryImageByKey.set(slugify(nc.name), imgUrl);
+        }
+      }
+    }
+
     const categoryMap = new Map<string, Category>();
     const collectionSet = new Set<string>();
     const products: Product[] = [];
@@ -851,17 +887,46 @@ async function fetchAllPublishedFromNexus(noStore = false): Promise<{
       const { product, categoryLabel } = mapNexusProduct(raw);
       products.push(product);
 
-      const catKey = `${product.gender}/${product.category}`;
+      const catKey = slugify(product.category);
       if (!categoryMap.has(catKey)) {
+        const nexusImg =
+          nexusCategoryImageByKey.get(catKey) ||
+          nexusCategoryImageByKey.get(slugify(categoryLabel)) ||
+          undefined;
         categoryMap.set(catKey, {
           slug: product.category,
           name: categoryLabel,
           gender: product.gender,
+          image: nexusImg,
         });
       }
       for (const col of product.collections) {
         collectionSet.add(col);
       }
+    }
+
+    // Incluir también categorías de Nexus (con su imagen) que aún no estén en el mapa
+    for (const nc of nexusCategoriesRaw) {
+      const trimmed = nc.name?.trim();
+      if (!trimmed) continue;
+      if (/^(colecci[oó]n|actividad|calce|fit|composici[oó]n|tela)\s*:/i.test(trimmed)) continue;
+      const catSlug = slugify(nc.slug || trimmed);
+      if (!catSlug || categoryMap.has(catSlug)) continue;
+      const resolvedGender: Gender = SHOE_CATEGORIES.has(catSlug)
+        ? "zapatillas"
+        : ACCESSORY_CATEGORIES.has(catSlug)
+          ? "accesorios"
+          : "mujer";
+      const nexusImg =
+        resolveNexusAssetUrl(nc.image) ||
+        nexusCategoryImageByKey.get(catSlug) ||
+        undefined;
+      categoryMap.set(catSlug, {
+        slug: catSlug,
+        name: trimmed,
+        gender: resolvedGender,
+        image: nexusImg,
+      });
     }
 
     // Combinar las colecciones base con cualquier colección nueva creada en Nexus
@@ -908,16 +973,40 @@ function matchesQuery(
   skip?: "sizes" | "colors" | "fits" | "category",
 ): boolean {
   if (q.gender && p.gender !== q.gender) return false;
-  if (q.category && skip !== "category" && p.category !== q.category) return false;
+  if (skip !== "category") {
+    const requestedCats = [
+      ...(q.category ? [q.category] : []),
+      ...(q.categories ?? []),
+    ]
+      .map((c) => slugify(c))
+      .filter(Boolean);
+    if (requestedCats.length > 0) {
+      const productCats = new Set([
+        slugify(p.category),
+        ...(productCategoriesStore.get(p.slug) ?? []).map((c) => slugify(c)),
+      ]);
+      if (!requestedCats.some((c) => productCats.has(c))) return false;
+    }
+  }
   if (q.collection && !p.collections.includes(q.collection)) return false;
   if (q.activity && !p.activities.includes(q.activity)) return false;
   if (q.badge && !p.badges.includes(q.badge)) return false;
   if (q.onSale && !p.compareAtPrice) return false;
   if (q.minPrice && p.price < q.minPrice) return false;
   if (q.maxPrice && p.price > q.maxPrice) return false;
-  if (q.fits?.length && skip !== "fits" && !q.fits.includes(p.fit)) return false;
-  if (q.colors?.length && skip !== "colors" && !p.colors.some((c) => q.colors!.includes(c.name))) return false;
-  if (q.sizes?.length && skip !== "sizes" && !p.variants.some((v) => v.stock > 0 && q.sizes!.includes(v.size))) {
+  if (q.fits?.length && skip !== "fits" && !q.fits.some((f) => normalize(f) === normalize(p.fit))) return false;
+  if (
+    q.colors?.length &&
+    skip !== "colors" &&
+    !p.colors.some((c) => q.colors!.some((qc) => normalize(qc) === normalize(c.name)))
+  ) {
+    return false;
+  }
+  if (
+    q.sizes?.length &&
+    skip !== "sizes" &&
+    !p.variants.some((v) => v.stock > 0 && q.sizes!.some((qs) => normalize(qs) === normalize(v.size)))
+  ) {
     return false;
   }
   if (q.q) {
@@ -986,7 +1075,7 @@ export const nexusCatalog: CatalogProvider = {
       categories: countFacet(
         products
           .filter((p) => matchesQuery(p, q, "category"))
-          .map((p) => p.category),
+          .map((p) => p.category.charAt(0).toUpperCase() + p.category.slice(1).replace(/-/g, " ")),
       ),
     };
 

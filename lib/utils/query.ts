@@ -7,6 +7,7 @@ export function parseQuery(sp: SP, base: ProductQuery = {}): ProductQuery {
   const num = (k: string) => { const n = parseInt(one(sp[k]) ?? "", 10); return Number.isNaN(n) ? undefined : n; };
   return {
     ...base,
+    categories: arr(sp.categoria),
     sizes: arr(sp.talle), colors: arr(sp.color), fits: arr(sp.fit), minPrice: num("min"), maxPrice: num("max"),
     activity: one(sp.actividad), onSale: one(sp.oferta) === "1" || undefined, q: one(sp.q),
     sort: (one(sp.orden) as ProductQuery["sort"]) ?? undefined,
