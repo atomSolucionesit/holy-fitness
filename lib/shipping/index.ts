@@ -1,9 +1,18 @@
 import "server-only";
+import { nexusShipping } from "@/lib/providers/nexus";
 import { CARRIERS, tariff, zoneOf, type Carrier, type Service } from "./tariffs";
 import type { ShippingOption } from "./types";
 
-export interface QuoteInput { zip: string; weightGrams: number }
-export interface ShippingProvider { quote(i: QuoteInput): Promise<ShippingOption[]> }
+export interface QuoteInput {
+  zip: string;
+  weightGrams: number;
+  subtotal?: number;
+  items?: { slug: string; qty: number }[];
+}
+export interface ShippingProvider {
+  quote(i: QuoteInput): Promise<ShippingOption[]>;
+  freeShippingFrom?(): Promise<number>;
+}
 
 /** Cotizador de demo basado en el tarifario estimado. */
 const estimado: ShippingProvider = {
@@ -24,4 +33,5 @@ const estimado: ShippingProvider = {
 // TODO(envios): adaptadores reales (Correo Argentino / Vía Cargo) cuando tengamos credenciales y documentación.
 const real: ShippingProvider = { async quote() { throw new Error("Cotizador real de envíos pendiente de implementación"); } };
 
-export const shipping: ShippingProvider = process.env.SHIPPING_SOURCE === "real" ? real : estimado;
+export const shipping: ShippingProvider =
+  process.env.SHIPPING_SOURCE === "nexus" ? nexusShipping : process.env.SHIPPING_SOURCE === "real" ? real : estimado;

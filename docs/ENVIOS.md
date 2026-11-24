@@ -10,8 +10,8 @@
 ## Las tarifas son ESTIMADAS
 `lib/shipping/tariffs.ts` usa un tarifario inventado para la demo: zona según el CP (CABA, GBA, centro, litoral, NOA, interior, Patagonia), precio base hasta 1 kg + adicional por kg, y la sucursal con un 25–30 % de descuento. Los pesos por categoría están en el mismo archivo. **No son precios reales de ninguno de los dos operadores.**
 
-## Para pasar a cotización real
-La interfaz es `ShippingProvider` en `lib/shipping/index.ts`; con `SHIPPING_SOURCE=real` se usa el adaptador `real`, hoy un `TODO`. Falta, para cada operador:
+## Para pasar a cotización real o administrada desde Nexus
+La interfaz es `ShippingProvider` en `lib/shipping/index.ts`; con `SHIPPING_SOURCE=nexus` delega en `nexusShipping` (`lib/providers/nexus/index.ts`, hoy `TODO`), y con `SHIPPING_SOURCE=real` se usa el adaptador `real`, hoy un `TODO`. Falta, para cada operador o integración:
 1. Contrato o credenciales de la API y su documentación (no hay endpoints inventados en el código).
 2. Peso y dimensiones reales por producto o variante (hoy es un peso por categoría).
 3. Código postal de origen del depósito o local.

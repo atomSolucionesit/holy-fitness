@@ -12,7 +12,7 @@ import { useShipping } from "./useShipping";
 export function CartDrawer() {
   const { lines, open, setOpen, setQty, remove } = useCart();
   const sub = cartSubtotal(lines);
-  const { selected } = useShipping();
+  const { selected, loading } = useShipping();
   const left = Math.max(0, FREE_SHIPPING_FROM - sub);
   return (
     <Drawer open={open} onOpenChange={setOpen} title="Tu carrito">
@@ -44,8 +44,8 @@ export function CartDrawer() {
       {lines.length > 0 && (
         <div className="space-y-2 border-t border-line bg-white p-5">
           <div className="flex justify-between text-sm"><span>Subtotal</span><span>{formatMoney(sub)}</span></div>
-          <div className="flex justify-between text-sm"><span>Envío · {selected.carrierName}</span><span>{selected.price === 0 ? "Gratis" : formatMoney(selected.price)}</span></div>
-          <div className="flex justify-between border-t border-line pt-2 font-semibold"><span>Total estimado</span><span>{formatMoney(sub + selected.price)}</span></div>
+          <div className="flex justify-between text-sm"><span>Envío{loading ? "" : ` · ${selected.carrierName}`}</span><span>{loading ? "Cotizando…" : selected.price === 0 ? "Gratis" : formatMoney(selected.price)}</span></div>
+          <div className="flex justify-between border-t border-line pt-2 font-semibold"><span>Total estimado</span><span>{loading ? "Cotizando…" : formatMoney(sub + selected.price)}</span></div>
           <p className="text-xs text-muted">Los cupones se aplican en el checkout.</p>
           <Button full href="/checkout" onClick={() => setOpen(false)}>Finalizar compra</Button>
         </div>
