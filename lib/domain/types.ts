@@ -11,7 +11,7 @@ export interface Product {
   colors: ColorOption[]; variants: Variant[];
   composition: string; rating: number; reviewCount: number; createdAt: string; sales: number;
 }
-export interface Category { slug: string; name: string; gender: Gender }
+export interface Category { slug: string; name: string; gender: Gender; image?: string }
 export interface Collection { slug: string; name: string; tagline: string; image: string }
 export interface Customer { id: string; email: string; name: string; phone?: string }
 
@@ -30,7 +30,7 @@ export interface Order {
 }
 
 export interface ProductQuery {
-  gender?: Gender; category?: string; collection?: string; activity?: string;
+  gender?: Gender; category?: string; categories?: string[]; collection?: string; activity?: string;
   sizes?: string[]; colors?: string[]; fits?: string[]; minPrice?: number; maxPrice?: number;
   sort?: "destacados" | "novedades" | "precio-asc" | "precio-desc" | "mas-vendidos";
   q?: string; limit?: number; offset?: number; badge?: Badge; onSale?: boolean;
