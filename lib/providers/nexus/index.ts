@@ -794,6 +794,7 @@ function mapNexusProduct(raw: NexusProductRaw): { product: Product; categoryLabe
       reviewCount: typeof raw.reviews === "number" && raw.reviews > 0 ? raw.reviews : stats.reviewCount,
       createdAt: raw.createdAt || new Date().toISOString(),
       sales: raw.outstanding ? stats.sales + 500 : stats.sales,
+      featured: Boolean(raw.outstanding),
     },
   };
 }
@@ -989,6 +990,7 @@ function matchesQuery(
   if (q.collection && !p.collections.includes(q.collection)) return false;
   if (q.activity && !p.activities.includes(q.activity)) return false;
   if (q.badge && !p.badges.includes(q.badge)) return false;
+  if (q.featured && !p.featured) return false;
   if (q.onSale && !p.compareAtPrice) return false;
   if (q.minPrice && p.price < q.minPrice) return false;
   if (q.maxPrice && p.price > q.maxPrice) return false;

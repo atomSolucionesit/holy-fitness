@@ -29,6 +29,7 @@ export function ProductCard({ p, priority }: { p: Product; priority?: boolean })
               <Img
                 src={primaryImage}
                 alt={`${p.name} ${color.name}`}
+                fallbackLabel={p.name}
                 priority={priority}
                 sizes="(min-width:1024px) 25vw, 50vw"
                 className={`transition-opacity duration-300 ${
@@ -43,6 +44,7 @@ export function ProductCard({ p, priority }: { p: Product; priority?: boolean })
                 <Img
                   src={secondaryImage!}
                   alt=""
+                  hideOnError
                   sizes="(min-width:1024px) 25vw, 50vw"
                   className="opacity-0 transition-opacity duration-300 group-hover:opacity-100"
                 />

@@ -1,6 +1,6 @@
 import Link from "next/link";
-import Image from "next/image";
 import { cn, formatMoney } from "@/lib/utils";
+export { SafeImage as Img } from "./SafeImage";
 
 type BtnProps = { variant?: "primary" | "outline" | "light" | "accent"; full?: boolean; href?: string; className?: string; children: React.ReactNode } & React.ButtonHTMLAttributes<HTMLButtonElement>;
 const base = "inline-flex h-12 items-center justify-center gap-2 px-6 label rounded-[2px] border transition-colors duration-150 disabled:opacity-40 disabled:cursor-not-allowed";
@@ -32,9 +32,6 @@ export const Stars = ({ rating, count }: { rating: number; count?: number }) => 
 );
 export const Swatch = ({ hex, active, label, onClick }: { hex: string; active?: boolean; label: string; onClick?: () => void }) => (
   <button type="button" aria-label={label} title={label} onClick={onClick} className={cn("h-5 w-5 rounded-full border border-line", active && "outline outline-2 outline-offset-2 outline-ink")} style={{ background: hex }} />
-);
-export const Img = ({ src, alt, className, priority, sizes, style }: { src: string; alt: string; className?: string; priority?: boolean; sizes?: string; style?: React.CSSProperties }) => (
-  <Image src={src} alt={alt} fill priority={priority} sizes={sizes ?? "100vw"} style={style} className={cn("object-cover", className)} />
 );
 export const SectionTitle = ({ children, href, label = "Ver todo" }: { children: React.ReactNode; href?: string; label?: string }) => (
   <div className="mb-6 flex items-end justify-between gap-4">

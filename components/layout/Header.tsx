@@ -4,19 +4,16 @@ import { useEffect, useMemo, useRef, useState } from "react";
 import { useCart, cartCount } from "@/store/cart";
 import { useUI } from "@/store/ui";
 import { Drawer } from "@/components/ui/Drawer";
-import Image from "next/image";
+import { Img } from "@/components/ui";
 import { Logo } from "@/components/ui/Logo";
-import type { Category, Collection } from "@/lib/domain/types";
+import type { Category } from "@/lib/domain/types";
 
 const EMPTY_CATEGORIES: Category[] = [];
-const EMPTY_COLLECTIONS: Collection[] = [];
 
 export function Header({
   categories = EMPTY_CATEGORIES,
-  collections = EMPTY_COLLECTIONS,
 }: {
   categories?: Category[];
-  collections?: Collection[];
 }) {
   const [open, setOpen] = useState(false);
   const [hoveredCatSlug, setHoveredCatSlug] = useState<string | null>(null);
@@ -157,23 +154,6 @@ export function Header({
                   ))}
                 </ul>
               )}
-              {collections.length > 0 && (
-                <div className="pt-2 border-t border-line">
-                  <p className="label mb-2 text-xs text-muted">Colecciones</p>
-                  <div className="flex flex-wrap gap-x-5 gap-y-1.5 text-sm">
-                    {collections.map((col) => (
-                      <Link
-                        key={col.slug}
-                        href={`/coleccion/${col.slug}`}
-                        onClick={() => setOpen(false)}
-                        className="hover:underline"
-                      >
-                        {col.name}
-                      </Link>
-                    ))}
-                  </div>
-                </div>
-              )}
             </div>
 
             <Link
@@ -183,10 +163,10 @@ export function Header({
             >
               {featureImage ? (
                 <>
-                  <Image
+                  <Img
                     src={featureImage}
                     alt={featureTitle}
-                    fill
+                    fallbackLabel={featureTitle}
                     sizes="320px"
                     className="object-cover transition-opacity duration-200"
                   />

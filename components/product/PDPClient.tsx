@@ -1,9 +1,8 @@
 "use client";
-import Image from "next/image";
 import { useMemo, useState } from "react";
 import * as Accordion from "@radix-ui/react-accordion";
 import type { Product } from "@/lib/domain/types";
-import { Button, Price, Stars, Swatch } from "@/components/ui";
+import { Button, Img, Price, Stars, Swatch } from "@/components/ui";
 import { WishlistButton } from "./WishlistButton";
 import { useCart } from "@/store/cart";
 import { installments } from "@/lib/domain/rules";
@@ -40,11 +39,11 @@ export function PDPClient({ p, initialColor }: { p: Product; initialColor?: stri
       <div className="grid min-w-0 gap-3 lg:grid-cols-[80px_1fr]">
         {color.images.length > 0 && (
           <div className="order-2 flex gap-2 overflow-x-auto lg:order-1 lg:flex-col lg:overflow-visible">{color.images.map((src, i) => (
-            <button key={src} onClick={() => setImg(i)} aria-label={`Imagen ${i + 1}`} className={cn("relative aspect-[4/5] w-16 shrink-0 overflow-hidden border bg-surface lg:w-full", i === img ? "border-ink" : "border-transparent")}><Image src={src} alt="" fill className="object-contain" /></button>))}</div>
+            <button key={src} onClick={() => setImg(i)} aria-label={`Imagen ${i + 1}`} className={cn("relative aspect-[4/5] w-16 shrink-0 overflow-hidden border bg-surface lg:w-full", i === img ? "border-ink" : "border-transparent")}><Img src={src} alt="" hideOnError className="object-contain" sizes="80px" /></button>))}</div>
         )}
         <div className={cn("relative order-1 mx-auto aspect-[4/5] max-h-[70vh] w-full lg:max-h-[min(78vh,760px)] overflow-hidden bg-surface lg:order-2", color.images.length === 0 && "lg:col-span-2 flex items-center justify-center border border-line p-8 text-center")}>
           {activeImg ? (
-            <Image src={activeImg} alt={`${p.name} ${color.name}`} fill priority className="object-contain" sizes="(min-width:1024px) 50vw, 100vw" />
+            <Img src={activeImg} alt={`${p.name} ${color.name}`} fallbackLabel={p.name} priority className="object-contain" sizes="(min-width:1024px) 50vw, 100vw" />
           ) : (
             <span className="display text-3xl text-ink">{p.name}</span>
           )}

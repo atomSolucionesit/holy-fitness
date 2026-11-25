@@ -12,7 +12,7 @@ export const revalidate = 300;
 export default async function Home() {
   const [categories, novedades, popular] = await Promise.all([
     catalog.listCategories().catch(() => []),
-    catalog.listProducts({ sort: "novedades", limit: 8 }),
+    catalog.listProducts({ featured: true, sort: "novedades", limit: 12 }),
     catalog.listProducts({ sort: "mas-vendidos", limit: 8 }),
   ]);
 
@@ -55,6 +55,7 @@ export default async function Home() {
                     <Img
                       src={c.image}
                       alt={c.name}
+                      fallbackLabel={c.name}
                       className="transition-transform duration-500 group-hover:scale-105"
                       sizes="(min-width:1024px) 25vw, 50vw"
                     />

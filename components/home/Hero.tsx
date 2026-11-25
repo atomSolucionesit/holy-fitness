@@ -2,7 +2,7 @@ import { Button, Img } from "@/components/ui";
 export function Hero({ title, sub, image, position = "50% 50%", cta1, cta2, priority }: { title: string; sub: string; image: string; position?: string; cta1: [string, string]; cta2?: [string, string]; priority?: boolean }) {
   return (
     <section className="relative isolate flex min-h-[78vh] items-end overflow-hidden bg-ink text-white lg:aspect-[1696/960] lg:max-h-[calc(100vh-80px)] lg:min-h-[560px] lg:w-full">
-      <Img src={image} alt="" priority={priority} className="-z-10 lg:!object-[50%_35%]" style={{ objectPosition: position }} />
+      <Img src={image} alt="" hideOnError priority={priority} className="-z-10 lg:!object-[50%_35%]" style={{ objectPosition: position }} />
       <div className="absolute inset-0 -z-10 bg-gradient-to-t from-black/70 via-black/10 to-transparent" />
       <div className="mx-auto w-full max-w-[1600px] px-4 pb-12 lg:px-8 lg:pb-20">
         <h1 className="display h-hero max-w-5xl">{title}</h1>

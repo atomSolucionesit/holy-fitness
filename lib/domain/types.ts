@@ -9,7 +9,7 @@ export interface Product {
   gender: Gender; category: string; activities: string[]; collections: string[];
   price: number; compareAtPrice?: number; badges: Badge[];
   colors: ColorOption[]; variants: Variant[];
-  composition: string; rating: number; reviewCount: number; createdAt: string; sales: number;
+  composition: string; rating: number; reviewCount: number; createdAt: string; sales: number; featured?: boolean;
 }
 export interface Category { slug: string; name: string; gender: Gender; image?: string }
 export interface Collection { slug: string; name: string; tagline: string; image: string }
@@ -33,6 +33,6 @@ export interface ProductQuery {
   gender?: Gender; category?: string; categories?: string[]; collection?: string; activity?: string;
   sizes?: string[]; colors?: string[]; fits?: string[]; minPrice?: number; maxPrice?: number;
   sort?: "destacados" | "novedades" | "precio-asc" | "precio-desc" | "mas-vendidos";
-  q?: string; limit?: number; offset?: number; badge?: Badge; onSale?: boolean;
+  q?: string; limit?: number; offset?: number; badge?: Badge; onSale?: boolean; featured?: boolean;
 }
 export interface ProductPage { items: Product[]; total: number; facets: { sizes: Record<string, number>; colors: Record<string, number>; fits: Record<string, number>; categories: Record<string, number> } }
