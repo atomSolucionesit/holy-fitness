@@ -11,7 +11,6 @@ import type {
   ProductQuery,
   Variant,
 } from "@/lib/domain/types";
-import { COLLECTIONS as DEFAULT_COLLECTIONS } from "@/data/seed";
 import { couponDiscount, FREE_SHIPPING_FROM } from "@/lib/domain/rules";
 import { CARRIERS, tariff, zoneOf, type Carrier, type Service } from "@/lib/shipping/tariffs";
 import type { ShippingOption } from "@/lib/shipping/types";
@@ -543,8 +542,7 @@ function mapNexusProduct(raw: NexusProductRaw): { product: Product; categoryLabe
     .map((img) => resolveNexusAssetUrl(img.url))
     .filter((u): u is string => Boolean(u));
 
-  const fallbackImg = fallbackImageFor(classified.gender, classified.category);
-  const defaultImages = productImages.length > 0 ? productImages : [fallbackImg];
+  const defaultImages = productImages;
 
   // Grupos de variantes (COLOR / SIZE / CUSTOM)
   const groups = (raw.variantGroups ?? []).filter((vg) => vg.isActive !== false);
@@ -929,18 +927,18 @@ async function fetchAllPublishedFromNexus(noStore = false): Promise<{
       });
     }
 
-    // Combinar las colecciones base con cualquier colección nueva creada en Nexus
-    const collectionsMap = new Map<string, Collection>(
-      DEFAULT_COLLECTIONS.map((c) => [c.slug, c]),
-    );
+    // Construir colecciones únicamente con las colecciones reales que existen en Nexus
+    const collectionsMap = new Map<string, Collection>();
     for (const colSlug of collectionSet) {
       if (!collectionsMap.has(colSlug)) {
         const sampleProd = products.find((p) => p.collections.includes(colSlug));
+        const img = sampleProd?.colors[0]?.images[0];
+        if (!img) continue;
         collectionsMap.set(colSlug, {
           slug: colSlug,
           name: colSlug.charAt(0).toUpperCase() + colSlug.slice(1).replace(/-/g, " "),
           tagline: `Colección ${colSlug.charAt(0).toUpperCase() + colSlug.slice(1)} de Holy Fitness.`,
-          image: sampleProd?.colors[0]?.images[0] || "/img/m-calzas.jpg",
+          image: img,
         });
       }
     }
@@ -1115,13 +1113,40 @@ export const nexusCatalog: CatalogProvider = {
     return collections.find((c) => c.slug === slug) ?? null;
   },
 
-  async search(term, limit = 6) {
+  async search(term, limit = 8) {
     const t = normalize(term.trim());
-    if (!t) return { products: [], categories: [] };
     const { products, categories } = await fetchAllPublishedFromNexus();
+    if (!t) {
+      const topProducts = [...products]
+        .sort((a, b) => b.sales - a.sales)
+        .slice(0, limit);
+      const topCategories = [...categories]
+        .sort((a, b) => a.name.localeCompare(b.name))
+        .slice(0, 6);
+      return { products: topProducts, categories: topCategories };
+    }
+
+    const scoreText = (text: string) => {
+      const n = normalize(text);
+      if (n.startsWith(t)) return 3;
+      if (n.split(/\s+/).some((w) => w.startsWith(t))) return 2;
+      if (n.includes(t)) return 1;
+      return 0;
+    };
+
+    const matchedProducts = products
+      .filter((p) => matchesQuery(p, { q: term }))
+      .sort((a, b) => scoreText(b.name) - scoreText(a.name) || b.sales - a.sales)
+      .slice(0, limit);
+
+    const matchedCategories = categories
+      .filter((c) => normalize(c.name).includes(t))
+      .sort((a, b) => scoreText(b.name) - scoreText(a.name))
+      .slice(0, 6);
+
     return {
-      products: products.filter((p) => matchesQuery(p, { q: term })).slice(0, limit),
-      categories: categories.filter((c) => normalize(c.name).includes(t)).slice(0, 4),
+      products: matchedProducts,
+      categories: matchedCategories,
     };
   },
 };

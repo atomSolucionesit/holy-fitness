@@ -72,12 +72,12 @@ export function Header({
       className="sticky top-0 z-40 border-b border-line bg-white"
       onMouseLeave={() => setOpen(false)}
     >
-      <div className="mx-auto flex h-16 max-w-[1600px] items-center gap-6 px-4 lg:px-8">
+      <div className="mx-auto flex h-[72px] max-w-[1600px] items-center gap-6 px-4 lg:h-20 lg:px-8">
         <button className="label lg:hidden" aria-label="Abrir menú" onClick={() => setMenu(true)}>
           ☰
         </button>
         <Link href="/" aria-label="Holy Fitness - Inicio" className="shrink-0">
-          <Logo className="h-12" />
+          <Logo className="h-14 lg:h-[68px]" />
         </Link>
         <nav className="hidden items-center gap-1 lg:flex" aria-label="Principal">
           <button

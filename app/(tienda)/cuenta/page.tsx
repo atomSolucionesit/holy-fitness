@@ -1,7 +1,25 @@
-import Link from "next/link";
+import { cookies } from "next/headers";
+import { AccountClient } from "@/components/account/AccountClient";
+import {
+  CUSTOMER_SESSION_COOKIE,
+  getNexusCustomerAccount,
+} from "@/lib/providers/nexus/customer-session";
+
+export const dynamic = "force-dynamic";
 export const metadata = { title: "Mi cuenta", robots: { index: false } };
-export default function Page() {
-  return (<div className="mx-auto max-w-xl px-4 py-16"><h1 className="display text-4xl">Mi cuenta</h1>
-    <p className="mt-4 text-muted">El ingreso con usuario y el historial de pedidos se activan al conectar Supabase Auth (próxima etapa). Por ahora podés guardar favoritos y consultar tu pedido con el link que recibís por email.</p>
-    <Link href="/cuenta/favoritos" className="label mt-6 inline-block underline">Ver mis favoritos</Link></div>);
+
+export default async function Page() {
+  const cookieStore = await cookies();
+  const token = cookieStore.get(CUSTOMER_SESSION_COOKIE)?.value;
+
+  const account = token
+    ? await getNexusCustomerAccount(token).catch(() => ({ customer: null, orders: [] }))
+    : { customer: null, orders: [] };
+
+  return (
+    <AccountClient
+      initialCustomer={account.customer}
+      initialOrders={account.orders}
+    />
+  );
 }

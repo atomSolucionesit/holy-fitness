@@ -23,7 +23,9 @@ export function CartDrawer() {
       <div className="flex-1 overflow-y-auto px-5">
         {lines.length === 0 ? <p className="py-12 text-center text-muted">Tu carrito está vacío.</p> : lines.map((l) => (
           <div key={l.variantId} className="flex gap-3 border-b border-line py-4">
-            <div className="relative h-28 w-22 shrink-0 bg-surface"><Image src={l.image} alt="" fill className="object-cover" /></div>
+            <div className="relative flex h-28 w-22 shrink-0 items-center justify-center bg-surface p-2 text-center">
+              {l.image ? <Image src={l.image} alt={l.name} fill className="object-cover" /> : <span className="text-[11px] font-semibold text-muted">{l.name}</span>}
+            </div>
             <div className="flex flex-1 flex-col text-sm">
               <Link href={`/producto/${l.slug}`} onClick={() => setOpen(false)} className="font-semibold">{l.name}</Link>
               <p className="text-muted">{l.color} / {l.size}</p>

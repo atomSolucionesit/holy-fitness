@@ -69,8 +69,11 @@ export default async function Page({
       )}
       {o.paymentMethod === "transferencia" && (
         <p className="mb-6 border border-line p-4 text-sm">
-          Transferí <b>{formatMoney(o.total)}</b> y enviá el comprobante por WhatsApp indicando tu número de pedido{" "}
-          <b>{o.id}</b>.
+          Transferí <b>{formatMoney(o.total)}</b> y enviá el comprobante por{" "}
+          <a href="https://wa.me/5493772563993" target="_blank" rel="noopener noreferrer" className="underline">
+            WhatsApp (3772 563993)
+          </a>{" "}
+          indicando tu número de pedido <b>{o.id}</b>.
         </p>
       )}
       {o.shippingOption && (
@@ -83,7 +86,7 @@ export default async function Page({
       )}
       {o.shippingMethod === "retiro" && (
         <p className="mb-6 border border-line p-4 text-sm">
-          Retirás en nuestro local. Te avisamos por email cuando esté listo.
+          Retirás en nuestro local (<b>Colón 1037</b> · Lunes a sábados de 9:00 a 12:30 y de 17:00 a 21:00 hs). Te avisamos por email cuando esté listo.
         </p>
       )}
       <ul className="divide-y divide-line border-y border-line">

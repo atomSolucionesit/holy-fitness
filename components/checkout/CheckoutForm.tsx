@@ -37,6 +37,23 @@ export function CheckoutForm() {
   const [checkingCoupon, setCheckingCoupon] = useState(false);
   const [err, setErr] = useState("");
   const [busy, setBusy] = useState(false);
+  const [prefill, setPrefill] = useState({ name: "", email: "", phone: "" });
+
+  useEffect(() => {
+    fetch("/api/auth/me", { cache: "no-store" })
+      .then((r) => (r.ok ? r.json() : null))
+      .then((data) => {
+        if (data?.authenticated && data.customer) {
+          const fullName = [data.customer.name, data.customer.lastName].filter(Boolean).join(" ").trim();
+          setPrefill({
+            name: fullName,
+            email: data.customer.email || "",
+            phone: data.customer.phone || "",
+          });
+        }
+      })
+      .catch(() => undefined);
+  }, []);
 
   useEffect(() => {
     fetch("/api/payments/config")
@@ -135,7 +152,7 @@ export function CheckoutForm() {
   return (
     <form onSubmit={submit} className="grid gap-10 lg:grid-cols-[1fr_400px]">
       <div>
-        <section className={sec}><h2 className={h}>1. Contacto</h2><div className="grid gap-3 md:grid-cols-2"><input name="name" required placeholder="Nombre y apellido" autoComplete="name" className={input} /><input name="email" type="email" required placeholder="Email" autoComplete="email" className={input} /><input name="phone" required placeholder="Teléfono" autoComplete="tel" className={input} /></div></section>
+        <section className={sec}><h2 className={h}>1. Contacto</h2><div className="grid gap-3 md:grid-cols-2"><input name="name" required placeholder="Nombre y apellido" autoComplete="name" defaultValue={prefill.name} key={`n-${prefill.name}`} className={input} /><input name="email" type="email" required placeholder="Email" autoComplete="email" defaultValue={prefill.email} key={`e-${prefill.email}`} className={input} /><input name="phone" required placeholder="Teléfono" autoComplete="tel" defaultValue={prefill.phone} key={`p-${prefill.phone}`} className={input} /></div></section>
         <section className={sec}><h2 className={h}>2. Envío</h2>
           <ShippingPicker />
           {!retiro && <div className="mt-4 grid gap-3 md:grid-cols-2">

@@ -8,7 +8,14 @@ export const AYUDA: Record<string, Page> = {
 };
 export const PAGINAS: Record<string, Page> = {
   nosotros: { title: "Nosotros", body: ["Holy Fitness es una marca argentina de ropa deportiva. Diseñamos prendas pensadas para entrenar de verdad, con tela de alto rendimiento y calce cómodo.", "[Completar con la historia de la marca]"] },
-  local: { title: "Nuestro local", body: ["Dirección: [completar]", "Horarios: [completar]", "Teléfono / WhatsApp: [completar]"] },
+  local: {
+    title: "Nuestro local",
+    body: [
+      "Dirección: Colón 1037, Paso de los Libres, Corrientes.",
+      "Horarios: Lunes a sábados de 9:00 a 12:30 hs y de 17:00 a 21:00 hs.",
+      "Celular / WhatsApp: 3772 563993.",
+    ],
+  },
   "trabaja-con-nosotros": { title: "Trabajá con nosotros", body: ["Escribinos a [email a completar] con tu CV y contanos qué te gustaría hacer."] },
 };
 export const LEGALES: Record<string, Page> = {
