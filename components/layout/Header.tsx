@@ -73,7 +73,7 @@ export function Header({
       onMouseLeave={() => setOpen(false)}
     >
       <div className="mx-auto flex h-[72px] max-w-[1600px] items-center gap-6 px-4 lg:h-20 lg:px-8">
-        <button className="label lg:hidden" aria-label="Abrir menú" onClick={() => setMenu(true)}>
+        <button className="label cursor-pointer transition-opacity hover:opacity-70 lg:hidden" aria-label="Abrir menú" onClick={() => setMenu(true)}>
           ☰
         </button>
         <Link href="/" aria-label="Holy Fitness - Inicio" className="shrink-0">
@@ -90,16 +90,33 @@ export function Header({
           </button>
         </nav>
         <div className="ml-auto flex items-center gap-4">
-          <button className="label" onClick={() => setSearch(true)} aria-label="Buscar">
+          <button
+            type="button"
+            className="label cursor-pointer py-2 underline-offset-8 transition-opacity hover:underline hover:opacity-75"
+            onClick={() => setSearch(true)}
+            aria-label="Buscar"
+          >
             Buscar
           </button>
-          <Link href="/cuenta/favoritos" className="label hidden sm:block" aria-label="Favoritos">
+          <Link
+            href="/cuenta/favoritos"
+            className="label hidden py-2 underline-offset-8 transition-opacity hover:underline hover:opacity-75 sm:block"
+            aria-label="Favoritos"
+          >
             ♡{wishlist.length > 0 && ` ${wishlist.length}`}
           </Link>
-          <Link href="/cuenta" className="label hidden sm:block">
+          <Link
+            href="/cuenta"
+            className="label hidden py-2 underline-offset-8 transition-opacity hover:underline hover:opacity-75 sm:block"
+          >
             Cuenta
           </Link>
-          <button className="label" onClick={() => setCart(true)} aria-label={`Abrir carrito, ${count} productos`}>
+          <button
+            type="button"
+            className="label cursor-pointer py-2 underline-offset-8 transition-opacity hover:underline hover:opacity-75"
+            onClick={() => setCart(true)}
+            aria-label={`Abrir carrito, ${count} productos`}
+          >
             Carrito ({count})
           </button>
         </div>

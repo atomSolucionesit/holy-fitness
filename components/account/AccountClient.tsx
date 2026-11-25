@@ -3,7 +3,7 @@ import { useState } from "react";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { Button } from "@/components/ui";
-import { signInWithGooglePopup } from "@/lib/firebase/client";
+import { signInWithGooglePopup, type FirebaseClientConfig } from "@/lib/firebase/client";
 import { formatMoney } from "@/lib/utils";
 import type { NexusCustomerOrder, NexusCustomerProfile } from "@/lib/providers/nexus/customer-session";
 
@@ -20,9 +20,11 @@ const STATUS_LABEL: Record<string, string> = {
 export function AccountClient({
   initialCustomer,
   initialOrders,
+  firebaseConfig,
 }: {
   initialCustomer: NexusCustomerProfile | null;
   initialOrders: NexusCustomerOrder[];
+  firebaseConfig?: FirebaseClientConfig;
 }) {
   const router = useRouter();
   const [customer, setCustomer] = useState<NexusCustomerProfile | null>(initialCustomer);
@@ -34,7 +36,7 @@ export function AccountClient({
     setBusy(true);
     setError("");
     try {
-      const idToken = await signInWithGooglePopup();
+      const idToken = await signInWithGooglePopup(firebaseConfig);
       const res = await fetch("/api/auth/google", {
         method: "POST",
         headers: { "Content-Type": "application/json" },

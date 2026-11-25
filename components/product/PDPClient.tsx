@@ -1,7 +1,6 @@
 "use client";
 import Image from "next/image";
 import { useMemo, useState } from "react";
-import * as Dialog from "@radix-ui/react-dialog";
 import * as Accordion from "@radix-ui/react-accordion";
 import type { Product } from "@/lib/domain/types";
 import { Button, Price, Stars, Swatch } from "@/components/ui";
@@ -10,7 +9,6 @@ import { useCart } from "@/store/cart";
 import { installments } from "@/lib/domain/rules";
 import { cn, formatMoney } from "@/lib/utils";
 
-const SIZE_TABLE = [["XS", "80-84", "60-64", "86-90"], ["S", "85-89", "65-69", "91-95"], ["M", "90-94", "70-74", "96-100"], ["L", "95-99", "75-79", "101-105"], ["XL", "100-106", "80-86", "106-112"]];
 
 export function PDPClient({ p, initialColor }: { p: Product; initialColor?: string }) {
   const [ci, setCi] = useState(
@@ -59,12 +57,7 @@ export function PDPClient({ p, initialColor }: { p: Product; initialColor?: stri
         <p className="mt-1 text-sm text-muted">3 cuotas sin interés de {formatMoney(installments(p.price))}</p>
         <p className="label mt-6">Color: <span className="font-normal normal-case tracking-normal">{color.name}</span></p>
         <div className="mt-2 flex gap-3">{p.colors.map((c, i) => <Swatch key={c.name} hex={c.hex} label={c.name} active={i === ci} onClick={() => { setCi(i); setSize(undefined); setImg(0); window.history.replaceState(null, "", `?color=${encodeURIComponent(c.name)}`); }} />)}</div>
-        <div className="mt-6 flex items-center justify-between"><p className="label">Talle</p>
-          <Dialog.Root><Dialog.Trigger className="text-sm underline">Guía de talles</Dialog.Trigger>
-            <Dialog.Portal><Dialog.Overlay className="fixed inset-0 z-50 bg-black/50" /><Dialog.Content aria-describedby={undefined} className="fixed left-1/2 top-1/2 z-50 w-[min(92vw,520px)] -translate-x-1/2 -translate-y-1/2 bg-white p-6">
-              <Dialog.Title className="display text-2xl">Guía de talles</Dialog.Title>
-              <table className="mt-4 w-full text-left text-sm"><thead><tr className="border-b border-line"><th className="py-2">Talle</th><th>Pecho (cm)</th><th>Cintura (cm)</th><th>Cadera (cm)</th></tr></thead><tbody>{SIZE_TABLE.map((r) => <tr key={r[0]} className="border-b border-line">{r.map((c, i) => <td key={i} className="py-2">{c}</td>)}</tr>)}</tbody></table>
-              <Dialog.Close className="label mt-6 underline">Cerrar</Dialog.Close></Dialog.Content></Dialog.Portal></Dialog.Root></div>
+        <p className="label mt-6">Talle</p>
         <div className="mt-2 flex flex-wrap gap-2" role="radiogroup" aria-label="Talle">{sizes.map((v) => (
           <button key={v.id} role="radio" aria-checked={size === v.size} onClick={() => { setSize(v.size); setErr(""); setNotify(false); }}
             className={cn("relative h-12 min-w-14 border px-3 text-sm", size === v.size ? "border-ink bg-ink text-white" : "border-line hover:border-ink", v.stock === 0 && "text-muted line-through")}>{v.size}</button>))}</div>

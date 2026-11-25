@@ -97,9 +97,8 @@ export default async function Home() {
 
       <section className="mx-auto mt-20 max-w-[1600px] px-4 lg:px-8">
         <SectionTitle>Hay más…</SectionTitle>
-        <div className="grid gap-3 md:grid-cols-3">
+        <div className="grid gap-3 md:grid-cols-2">
           {[
-            ["Guía de talles", "Encontrá tu calce perfecto.", "/ayuda/talles"],
             ["Cuidado de tus prendas", "Que duren más y mejor.", "/blog/cuidado-de-tus-prendas"],
             ["Nuestro local", "Visitanos y probate todo.", "/paginas/local"],
           ].map(([t, d, h]) => (

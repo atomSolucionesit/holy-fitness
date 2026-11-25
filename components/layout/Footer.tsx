@@ -3,7 +3,7 @@ import { Logo } from "@/components/ui/Logo";
 import { NewsletterForm } from "@/components/home/NewsletterForm";
 import { NEWSLETTER_ENABLED } from "@/lib/domain/rules";
 const COLS = [
-  { t: "Ayuda", l: [["Envíos", "/ayuda/envios"], ["Cambios y devoluciones", "/ayuda/cambios-y-devoluciones"], ["Seguimiento de pedido", "/ayuda/seguimiento"], ["Medios de pago", "/ayuda/medios-de-pago"], ["Guía de talles", "/ayuda/talles"]] },
+  { t: "Ayuda", l: [["Envíos", "/ayuda/envios"], ["Cambios y devoluciones", "/ayuda/cambios-y-devoluciones"], ["Seguimiento de pedido", "/ayuda/seguimiento"], ["Medios de pago", "/ayuda/medios-de-pago"]] },
   { t: "Mi cuenta", l: [["Ingresar", "/cuenta"], ["Mis pedidos", "/cuenta"], ["Favoritos", "/cuenta/favoritos"]] },
   { t: "Holy Fitness", l: [["Nosotros", "/paginas/nosotros"], ["Nuestro local", "/paginas/local"], ["Blog", "/blog"]] },
   { t: "Legales", l: [["Términos y condiciones", "/legales/terminos"], ["Política de privacidad", "/legales/privacidad"]] },
